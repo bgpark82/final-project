@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- 
@@ -10,6 +12,8 @@
 	여러개의 db를 사용한다면, 각 셋팅이 저장된 프로퍼티를 가져와서 한번에 가지고 있을 수 있다.
 	-->
 	<!-- classpath : src/main/resources를 가르킨다. (이클립스 설정에 이렇게 되어있음.) 나중에 찾아보자-->
+	<context:component-scan base-package="kh.coupon.mvc"></context:component-scan>
+	
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations"> 
 			<list>

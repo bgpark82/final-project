@@ -44,7 +44,7 @@ public class HomeController {
 				return "index";
 			} else {
 				logger.info("회원가입 실패");
-				return "userViews/userRegisterForom";
+				return "userViews/userRegisterForm";
 			}
 		}
 	}
@@ -59,6 +59,13 @@ public class HomeController {
 		model.addAttribute("idNotUsed", idNotUsed);
 		return "memberIdChk";
 	}
+	
+	@RequestMapping("main")
+	public String main() {
+		return "main";
+	}
+	
+	
 	
 	
 	

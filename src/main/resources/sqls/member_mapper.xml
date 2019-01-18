@@ -3,7 +3,7 @@
 <mapper namespace="member">
 
 	<insert id="insert" parameterType="MemberDto">
-		INSERT INTO member VALUES(member_seq.NEXTVAL, #{member_name}, #{member_id}, #{member_password}, #{member_profile}, #{member_phone}, SYSDATE,'', #{member_nickname}, #{member_class}, #{member_email}, 'ROLE_USER','','','yes')
+		INSERT INTO member VALUES(member_seq.NEXTVAL, #{member_name}, #{member_id}, #{member_password}, #{member_profile}, #{member_phone}, SYSDATE,'', #{member_nickname}, #{member_class}, #{member_email}, 'ROLE_USER','','','1')
 	</insert>
 	
 	<select id="idchk" parameterType="String" resultType="String">

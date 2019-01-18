@@ -46,13 +46,14 @@ CREATE TABLE member(
 	member_role	VARCHAR2(500)	NOT NULL,						
 	member_withdraw	VARCHAR2(500)	NULL,						
 	member_date_withdraw	DATE	NULL,							
-	member_verification	VARCHAR2(500)	NOT NULL,
+	member_enabled	CHAR(2)	NOT NULL,
 	CONSTRAINT member_pk PRIMARY KEY(member_no),
 	CONSTRAINT member_uq_id UNIQUE(member_id),
 	CONSTRAINT member_uq_phone UNIQUE(member_phone),
 	CONSTRAINT member_uq_nickname UNIQUE(member_nickname),
 	CONSTRAINT member_uq_email UNIQUE(member_email),
-	CONSTRAINT member_role_chk CHECK(member_role IN('ROLE_USER','ROLE_CLIENT'))
+	CONSTRAINT member_role_chk CHECK(member_role IN('ROLE_USER','ROLE_CLIENT')),
+	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0'))
 );
 
 SELECT * FROM member

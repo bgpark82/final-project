@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +10,21 @@
 </head>
 <body>
 <h1>INDEX PAGE</h1>
-<form action="home/login" method="post">
-	ID<input type="text" name="user_id"> <br>
-	PW<input type="text" name="user_pw"> <br>
+<form:form action="${pageContext.request.contextPath }/home/login" method="post" >
+	ID : <input type="text" name="username"/> <br>
+	PW : <input type="password" name="password"/> <br>
 	
 	<input type="submit" value="로그인">
 	<input type="button" value="회원가입" onclick="location.href='home/registerform'">
-</form>
+</form:form>
+
+	<c:if test="${param.error != null }">
+		아이디/비밀번호를 확인해주세요.
+	</c:if>
+	
+	<c:if test="${param.logout != null }">
+		로그아웃 하셨습니다.
+	</c:if>
 
 	<h3>컨트롤러 TEST</h3>
 	<a href="home/test">homeControllerTest</a> <br>
