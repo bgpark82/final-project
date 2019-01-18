@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+	<!-- 각 Dto들을 잡아주면된다. -->
+	<typeAliases>
+		<typeAlias alias="MemberDto" type="kh.coupon.mvc.dto.MemberDto"/>
+	</typeAliases>
+		
+	<mappers>
+		<mapper resource="/sqls/home_mapper.xml"/>
+		<mapper resource="/sqls/member_mapper.xml"/>
+		<mapper resource="/sqls/user_mapper.xml"/>
+		<mapper resource="/sqls/academy_mapper.xml"/>
+		<mapper resource="/sqls/client_mapper.xml"/>
+	</mappers>
+</configuration>
