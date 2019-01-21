@@ -85,6 +85,12 @@ public class HomeController {
 		return "main";
 	}
 	
+	@RequestMapping("accessDenied")
+	public String accessDenied() {
+		return "access_denied";
+	}
+	
+	
 	
 	
 	
