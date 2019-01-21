@@ -23,6 +23,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		return new BCryptPasswordEncoder();
 	}
 	
+	@Bean
+	public AuthenticationSuccessHandler successHandler() {
+		return new SuccessHandle();
+	}
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
@@ -40,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.formLogin()
 				.loginPage("/")
 				.loginProcessingUrl("/home/login")
-				.successForwardUrl("/home/main")
+				.successHandler(successHandler())
+//				.successForwardUrl("/home/main")
 				.permitAll()
 			.and()
 				.logout()
@@ -48,6 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.and()
 				.exceptionHandling()
 				.accessDeniedPage("/home/accessDenied");
+		
+		
 	}
 	
 	

@@ -3,11 +3,11 @@
 <mapper namespace="member">
 
 	<insert id="insert" parameterType="MemberDto">
-		INSERT INTO member VALUES(member_seq.NEXTVAL, #{member_name}, #{member_id}, #{member_password}, #{member_profile}, #{member_phone}, SYSDATE,'', #{member_nickname}, #{member_class}, #{member_email}, 'ROLE_USER','','','1')
+		INSERT INTO member VALUES(member_seq.NEXTVAL, #{member_name}, #{member_id}, #{member_password}, #{member_profile}, #{member_phone}, SYSDATE,'', #{member_nickname}, #{member_class}, #{member_email}, #{member_role},'','','1')
 	</insert>
 	
-	<select id="idchk" parameterType="String" resultType="String">
-		SELECT member_id FROM member WHERE member_id = #{member_id}
+	<select id="idchk" parameterType="MemberDto" resultType="String">
+		SELECT member_id FROM member WHERE member_id = #{member_id} AND member_role = #{member_role}
 	</select>
 
 </mapper>

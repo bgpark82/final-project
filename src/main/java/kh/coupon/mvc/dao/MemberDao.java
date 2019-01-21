@@ -7,6 +7,6 @@ public interface MemberDao {
 	String namespace = "member.";
 	
 	public int insert(MemberDto dto);
-	public String idChk(String member_id);
+	public String idChk(MemberDto dto);
 
 }

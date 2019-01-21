@@ -27,11 +27,11 @@ public class MemberDao_impl implements MemberDao {
 	}
 
 	@Override
-	public String idChk(String member_id) {
+	public String idChk(MemberDto dto) {
 		String res = null;
 		
 		try {
-			res = sqlSession.selectOne(namespace+"idchk", member_id);
+			res = sqlSession.selectOne(namespace+"idchk", dto);
 		} catch(Exception e) {
 			System.out.println("idChk 실패");
 			e.printStackTrace();

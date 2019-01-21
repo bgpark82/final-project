@@ -11,16 +11,11 @@
 <title>Insert title here</title>
 </head>
 <body>
+	
+	<%@ include file="./form/header.jsp" %>
 
-	<security:authorize access="isAuthenticated()">
-		<security:authentication property="principal.username"/>님 반갑습니다.
-		
-		<form:form action="${pageContext.request.contextPath }/logout" method="POST">
-			<input type="submit" value="로그아웃">
-		</form:form>
-		
-		<%-- <security:authorize access="${pageContext.request.contextPath}/list">리스트</security:authorize> --%>
-	</security:authorize>
 
+
+	<%-- <%@ include file="./form/footer.jsp" %> --%>
 </body>
 </html>

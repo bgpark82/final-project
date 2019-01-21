@@ -4,15 +4,19 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import kh.coupon.mvc.biz.MemberBiz;
 import kh.coupon.mvc.dto.MemberDto;
@@ -25,18 +29,33 @@ public class HomeController {
 	@Autowired	private Logger logger;
 
 
-	@RequestMapping("registerform")
-	public String register_form(Model model) {
-		model.addAttribute("dto",new MemberDto());
+	@RequestMapping("registerPage")
+	public String register_page() {
 		//user 인지 client 인지를 구분하는 값(member_role)을 받아와서 if문 사용해 return의 보내질 곳 수정해야 함
-		return "userViews/userRegisterForm";
+		return "register";
 	}
 	
-	@RequestMapping("register")
+	@RequestMapping("register/{role}")
+	public String register_form(Model model, @PathVariable(value="role") String role, HttpServletRequest req) {
+		String member_role = "";
+		if(role.equals("user")) {	
+			member_role="ROLE_USER";
+		} else if (role.equals("client")) {
+			member_role="ROLE_CLIENT";
+		}
+		MemberDto dto = new MemberDto();
+		dto.setMember_role(member_role);
+		model.addAttribute("dto", dto);
+		req.setAttribute("member_role", member_role);
+		return "registerForm";
+	}
+	
+	@RequestMapping(value="registerConfirm", method=RequestMethod.POST)
 	public String register(@Valid @ModelAttribute("dto") MemberDto dto, BindingResult bind) {
+		System.out.println("member_role : " +dto.getMember_role());
 		if(bind.hasErrors()) {
 			logger.info("서식 오류");
-			return "userViews/userRegisterForm";
+			return "registerForm";
 		} else {
 			int res = memberBiz.insert(dto);
 			if(res > 0) {
@@ -44,14 +63,15 @@ public class HomeController {
 				return "index";
 			} else {
 				logger.info("회원가입 실패");
-				return "userViews/userRegisterForm";
+				return "registerForm";
 			}
 		}
 	}
 	
-	@RequestMapping("idchk")
-	public String idchk(Model model, String member_id) {
-		String res = memberBiz.idChk(member_id);
+	@RequestMapping("register/{role}/idchk")
+	public String idchk(Model model, String member_id, @PathVariable(value="role") String role) {
+		MemberDto dto = new MemberDto(member_id, role);
+		String res = memberBiz.idChk(dto);
 		boolean idNotUsed = true;
 		if(res != null) {
 			idNotUsed = false;
@@ -64,11 +84,6 @@ public class HomeController {
 	public String main() {
 		return "main";
 	}
-	
-	
-	
-	
-	
 	
 	
 	

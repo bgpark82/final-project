@@ -31,6 +31,13 @@ public class MemberDto {
 	}
 
 
+	public MemberDto(String member_id, String member_role) {
+		super();
+		this.member_id = member_id;
+		this.member_role = member_role;
+	}
+
+
 	public MemberDto(int member_no, String member_name, String member_id,
 			@Size(max = 10, message = "10자리 이하의 숫자로 입력해세요") String member_password, String member_profile,
 			String member_phone, Date member_date_create, Date member_date_update, String member_nickname,

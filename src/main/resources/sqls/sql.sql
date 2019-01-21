@@ -56,7 +56,7 @@ CREATE TABLE member(
 	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0'))
 );
 
-SELECT * FROM member
+SELECT * FROM MEMBER;
 
 CREATE TABLE client (
 	client_no	NUMBER	NOT NULL,								
