@@ -49,8 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //				.successForwardUrl("/home/main")
 				.permitAll()
 			.and()
-				.logout()
+				.logout().deleteCookies("JSESSIONID")
 				.permitAll()
+			.and()
+				.rememberMe().key("unique cookie").tokenValiditySeconds(60*60*24*28)
 			.and()
 				.exceptionHandling()
 				.accessDeniedPage("/home/accessDenied");

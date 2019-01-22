@@ -13,6 +13,7 @@
 <form:form action="${pageContext.request.contextPath }/home/login" method="post" >
 	ID : <input type="text" name="username"/> <br>
 	PW : <input type="password" name="password"/> <br>
+	자동 로그인 <input type="checkbox" name="remember-me"/>
 	
 	<input type="submit" value="로그인">
 	<input type="button" value="회원가입" onclick="location.href='home/registerPage'">
@@ -25,6 +26,9 @@
 	<c:if test="${param.logout != null }">
 		로그아웃 하셨습니다.
 	</c:if>
+
+	
+	
 
 	<h3>컨트롤러 TEST</h3>
 	<a href="home/test">homeControllerTest</a> <br>
