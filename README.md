@@ -20,12 +20,13 @@ KH 아카데미 파이널 프로젝트
 - 유저만 접근하고 싶을 때
 ```
 	<security:authorize access="hasRole('USER')">
-		<a href="../user/coupone_list">쿠폰 리스트</a>
+		<a href="${pageContext.request.contextPath }/user/coupone_list">쿠폰 리스트</a>
 	</security:authorize>
 ```	
 - 제휴업체만 접근하고 싶을 때
 ```	
 <security:authorize access="hasRole('CLIENT')">
-		<a href="../client/menu_list">메뉴 리스트</a>
+		<a href="${pageContext.request.contextPath }/client/menu_list">메뉴 리스트</a>
 	</security:authorize>
 ```
+> 404에러가 뜰 경우 경로 앞에 ${pageContext.request.contextPath } 추가
