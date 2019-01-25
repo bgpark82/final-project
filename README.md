@@ -3,8 +3,17 @@ KH 아카데미 파이널 프로젝트
 
 ##  Spring Security
 
-#### 1.  Sesssion은 `${username }`으로 받아온다.
->${username } = member_id
+#### 1.  Sesssion은 `${user }`으로 받아온다.
+>${user } = MemberDto
+
+#### 2. 권한(member_role)별 경로 시작
+- ROLE_USER : `/user`
+- ROLE_CLIENT : `/client`
+- ROLE_ACCOUNT : `/academy/account`
+- ROLE_PROMOTION : `/academy/promotion`
+- ROLE_OPERATION : `/academy/operation`
+
+> 권한과 url이 다르면 로그인이 필요하므로 로그인 화면으로 보냄
 
 #### 2.  main.jsp에서 접근 설정</h2>
 	
