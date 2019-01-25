@@ -22,13 +22,7 @@
  
 </head>
 <body>
-
-	<!-- 
-	세션처리 
-		${username}으로 세션을 불러옴
-		username = id
-	-->
-							
+		
 	<security:authentication property="principal.username"/>님 반갑습니다.
 
 	<form:form action="${pageContext.request.contextPath }/logout" method="POST">

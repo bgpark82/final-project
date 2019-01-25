@@ -14,7 +14,6 @@
 	
 	<%@ include file="./form/header.jsp" %>
 
-	${username }
 	<security:authorize access="hasRole('USER')">
 		<a href="../user/coupone_list">쿠폰 리스트</a>
 	</security:authorize>
