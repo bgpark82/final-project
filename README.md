@@ -29,4 +29,4 @@ KH 아카데미 파이널 프로젝트
 		<a href="${pageContext.request.contextPath }/client/menu_list">메뉴 리스트</a>
 	</security:authorize>
 ```
-> 404에러가 뜰 경우 경로 앞에 ${pageContext.request.contextPath } 추가
+> 404에러가 뜰 경우 경로 앞에 위와같이 ${pageContext.request.contextPath } 추가
