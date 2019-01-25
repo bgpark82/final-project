@@ -12,10 +12,12 @@ import kh.coupon.mvc.dto.MemberDto;
 @RequestMapping("user")
 public class UserContoller {
 	
+	
 	@RequestMapping("coupone_list")
 	public String coupone_list() {
 		return "userViews/coupone_list";
 	}
+
 	
 	
 	
