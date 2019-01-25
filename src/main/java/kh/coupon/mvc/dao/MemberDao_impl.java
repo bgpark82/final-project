@@ -9,20 +9,17 @@ import kh.coupon.mvc.dto.MemberDto;
 @Repository
 public class MemberDao_impl implements MemberDao {
 
-	@Autowired
-	private SqlSessionTemplate sqlSession;
+	@Autowired private SqlSessionTemplate sqlSession;
 	
 	@Override
 	public int insert(MemberDto dto) {
 		int res = 0;
-		System.out.println("phone : " + dto.getMember_phone());
 		try {
 			res = sqlSession.insert(namespace+"insert", dto);
 		} catch(Exception e) {
 			System.out.println("insert 실패");
 			e.printStackTrace();
 		}
-		
 		return res;
 	}
 
@@ -39,5 +36,15 @@ public class MemberDao_impl implements MemberDao {
 		
 		return res;
 	}
+	
+	@Override
+	public MemberDto getSession(MemberDto dto) {
+		MemberDto memberDto = sqlSession.selectOne(namespace+"session",dto);
+		return memberDto;
+	}
+	
+	
+	
+	
 
 }

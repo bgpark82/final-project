@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,12 +28,14 @@ public class HomeController {
 	@Autowired	private Logger logger;
 
 
+	// 사용자, 제휴업체 회원가입 페이지
 	@RequestMapping("registerPage")
 	public String register_page() {
 		//user 인지 client 인지를 구분하는 값(member_role)을 받아와서 if문 사용해 return의 보내질 곳 수정해야 함
 		return "register";
 	}
 	
+	// 사용자, 제휴업체에 따른 회원가입 양식 페이지
 	@RequestMapping("register/{role}")
 	public String register_form(Model model, @PathVariable(value="role") String role, HttpServletRequest req) {
 		String member_role = "";
@@ -50,9 +51,11 @@ public class HomeController {
 		return "registerForm";
 	}
 	
+	
+	// 회원가입 성공시
 	@RequestMapping(value="registerConfirm", method=RequestMethod.POST)
-	public String register(@Valid @ModelAttribute("dto") MemberDto dto, BindingResult bind) {
-		System.out.println("member_role : " +dto.getMember_role());
+	public String register(@Valid @ModelAttribute("dto") MemberDto dto, BindingResult bind, HttpServletRequest request) {
+		
 		if(bind.hasErrors()) {
 			logger.info("서식 오류");
 			return "registerForm";
@@ -68,6 +71,7 @@ public class HomeController {
 		}
 	}
 	
+	// 아이디 중복확인
 	@RequestMapping("register/{role}/idchk")
 	public String idchk(Model model, String member_id, @PathVariable(value="role") String role) {
 		MemberDto dto = new MemberDto(member_id, role);
@@ -80,15 +84,21 @@ public class HomeController {
 		return "memberIdChk";
 	}
 	
+	
 	@RequestMapping("main")
 	public String main() {
 		return "main";
 	}
 	
+	// 권한이 없는 사용자가 접속 시도 시
 	@RequestMapping("accessDenied")
 	public String accessDenied() {
 		return "access_denied";
 	}
+	
+	
+	
+	
 	
 	
 	

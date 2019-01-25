@@ -8,5 +8,5 @@ public interface MemberDao {
 	
 	public int insert(MemberDto dto);
 	public String idChk(MemberDto dto);
-
+	public MemberDto getSession(MemberDto dto);
 }

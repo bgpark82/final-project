@@ -28,8 +28,13 @@ public class MemberBiz_impl implements MemberBiz {
 	@Override
 	@Transactional
 	public String idChk(MemberDto dto) {
-		// TODO Auto-generated method stub
 		return member_dao.idChk(dto);
+	}
+
+	@Override
+	@Transactional
+	public MemberDto getSession(MemberDto dto) {
+		return member_dao.getSession(dto);
 	}
 
 }
