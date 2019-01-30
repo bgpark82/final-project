@@ -4,6 +4,8 @@
 	<!-- 각 Dto들을 잡아주면된다. -->
 	<typeAliases>
 		<typeAlias alias="MemberDto" type="kh.coupon.mvc.dto.MemberDto"/>
+		<typeAlias alias="CouponDto" type="kh.coupon.mvc.dto.CouponDto"/>
+		<typeAlias alias="ClientDto" type="kh.coupon.mvc.dto.ClientDto"/>
 	</typeAliases>
 		
 	<mappers>
@@ -12,5 +14,6 @@
 		<mapper resource="/sqls/user_mapper.xml"/>
 		<mapper resource="/sqls/academy_mapper.xml"/>
 		<mapper resource="/sqls/client_mapper.xml"/>
+		<mapper resource="/sqls/coupon_mapper.xml"/>
 	</mappers>
 </configuration>
