@@ -41,3 +41,31 @@ KH 아카데미 파이널 프로젝트
 [아임포트를 통한 카카오 페이](https://www.iamport.kr/getstarted)
 
 
+## 파일 업로드
+
+1. POM.xml
+```
+<!-- commons-io -->
+<dependency>
+	<groupId>commons-io</groupId>
+	<artifactId>commons-io</artifactId>
+	<version>2.4</version>
+</dependency>
+
+<!-- commons-fileupload -->
+<dependency>
+	<groupId>commons-fileupload</groupId>
+	<artifactId>commons-fileupload</artifactId>
+	<version>1.3.1</version>
+</dependency>
+```
+
+2. applicationContext.xml
+```
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<property name="maxUploadSize" value="100000000" />
+	<property name="defaultEncoding" value="UTF-8"/>
+</bean>	
+```
+
+
