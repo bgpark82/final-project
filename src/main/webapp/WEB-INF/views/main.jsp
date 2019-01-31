@@ -23,6 +23,20 @@
 		<a href="../client/menu_list">메뉴 리스트</a>
 	</security:authorize>
 	
+	
+	<security:authorize access="hasRole('ACCOUNT')">
+		<a href="${pageContext.request.contextPath }/academy/coupon_stock">회계팀 로그인</a>
+	</security:authorize>
+	
+	<security:authorize access="hasRole('PROMOTION')">
+		<a href="${pageContext.request.contextPath }/academy/client_list">홍보팀 로그인</a>
+	</security:authorize>
+	
+	<security:authorize access="hasRole('OPERATION')">
+		<a href="${pageContext.request.contextPath }/academy/coupon_sale_page">운영팀 로그인</a>
+	</security:authorize>
+	
+	
 	<%-- <%@ include file="./form/footer.jsp" %> --%>
 </body>
 </html>

@@ -4,6 +4,10 @@
 	<!-- 각 Dto들을 잡아주면된다. -->
 	<typeAliases>
 		<typeAlias alias="MemberDto" type="kh.coupon.mvc.dto.MemberDto"/>
+		<typeAlias type="kh.coupon.mvc.dto.Coupon" alias="Coupon"/>
+		<typeAlias type="kh.coupon.mvc.dto.Coupon_history" alias="Coupon_history"/>
+		<typeAlias type="kh.coupon.mvc.dto.Menu" alias="Menu"/>
+		<typeAlias type="kh.coupon.mvc.dto.Client" alias="Client"/>
 	</typeAliases>
 		
 	<mappers>
