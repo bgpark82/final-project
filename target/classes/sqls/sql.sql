@@ -107,7 +107,7 @@ SELECT * FROM menu;
 DROP TABLE coupon;
 DROP SEQUENCE coupon_seq;
 CREATE SEQUENCE coupon_seq;
-CREATE TABLE coupon (
+CREATE TABLE coupon (--
 	--해당 쿠폰의 기본정보
 	coupon_no	 NUMBER	 PRIMARY  KEY,					--쿠폰 고유번호					 
 	client_no	 NUMBER 	NOT  NULL,					--제휴업체 고유번호								
