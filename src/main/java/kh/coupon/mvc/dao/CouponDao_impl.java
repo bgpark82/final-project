@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import kh.coupon.mvc.dto.ClientDto;
 import kh.coupon.mvc.dto.CouponDto;
+import kh.coupon.mvc.dto.MemberDto;
 
 @Repository
 public class CouponDao_impl implements CouponDao {
@@ -22,7 +23,7 @@ public class CouponDao_impl implements CouponDao {
 	public List<CouponDto> coupon_list() {
 		List<CouponDto> res = null;
 		try {
-			res = sqlSessionTemplate.selectList(namespace+"coupon_list");
+			res = sqlSessionTemplate.selectList(namespace+"coupon_list");		
 		} catch(Exception e) {
 			System.out.println("daoImpl coupon_list 오류");
 			e.printStackTrace();
@@ -118,13 +119,43 @@ public class CouponDao_impl implements CouponDao {
 		map.put("menu_no", menu_no);
 		map.put("coupon_count",coupon_count);
 		int res = sqlSessionTemplate.update(namespace+"my_coupon_use",map);
-		
+		System.out.println(res);
 		if(res>0) {
 			System.out.println("daoImpl my_coupon_use 성공");
 		} else {
 			System.out.println("daoImpl my_coupon_use 실패");
 		}
 		return res;
+	}
+
+	@Override
+	public int coupon_gift(int member_to_no, int member_from_no, int member_no, int client_no, int menu_no, int coupon_count) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("member_to_no", member_to_no);
+		map.put("member_from_no", member_from_no);
+		map.put("member_no", member_no);
+		map.put("client_no", client_no);
+		map.put("menu_no", menu_no);
+		map.put("coupon_count",coupon_count);
+		int res = sqlSessionTemplate.update(namespace+"coupon_gift",map);		
+		if(res>0) {
+			System.out.println("daoImpl coupon_gift 성공");
+		} else {
+			System.out.println("daoImpl coupon_gift 실패");
+		}
+		return res;
+	}
+
+	@Override
+	public int check_phone(String member_phone) {
+		int member_no = 0;
+		try {
+			member_no = sqlSessionTemplate.selectOne(namespace+"check_phone",member_phone);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("daoImpl check_phone 오류");
+		}
+		return member_no;
 	}
 	
 

@@ -34,6 +34,13 @@ function coupon_buy(){
 	location.href="coupon_buy?member_no=${user.member_no}&client_no=${coupon.client_no }&menu_no=${coupon.menu_no}&coupon_count="+condition;
 }
 
+function phone(){
+	var member_phone = $("#friend_phone").val();
+	var condition_2 = $("#condition_2 option:selected").val();
+	location.href="coupon_gift?member_phone="+member_phone+"&member_from_no=${user.member_no}&member_no=${coupon.member_no}&client_no=${coupon.client_no}&menu_no=${coupon.menu_no}&coupon_count="+condition_2;
+	
+}
+
 </script>
 <meta charset="EUC-KR">
 <title>쿠폰 상세보기 페이지</title>
@@ -185,12 +192,12 @@ function coupon_buy(){
 							<br><br>
 						<span id="totalmoney_2">금액 : ${coupon.menu_price }</span><br><br>
 						선물 받는 사람 번호<br>
-						: <input id="friend_phon" type="text" placeholder="ex)01012345678"/><br>
+						: <input id="friend_phone" type="text" placeholder="ex)01012345678"/><br>
 					</h4>
 					</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" onclick="location.href='#'">선물하기</button>
+						<button type="button" class="btn btn-default" onclick="phone();">선물하기</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 					</div>
 					</div>

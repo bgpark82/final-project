@@ -92,14 +92,14 @@ CREATE TABLE menu(
 	menu_create_date DATE NOT NULL,
 	CONSTRAINT fk_menu FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE
 );
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
 COMMIT;
 SELECT * FROM menu;
 
@@ -131,19 +131,24 @@ CREATE TABLE coupon (
 	CONSTRAINT fk_coupon2 FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE,
 	CONSTRAINT fk_coupon3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE
 );
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,9,'7gram','아메리카노',2000,'../img/americano.png','좋은원두를 사용합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,10,'7gram','딸기스무디',3000,'../img/strawberrySmothy.png','딸기딸기 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,11,'7gram','레몬티',2000,'../img/remonTea.png','레몬레몬 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,12,'7gram','카페모카',3000,'../img/cafemoca.png','커피와 초코의 조합!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,13,'7gram','유자프라페',3000,'../img/ujaPrafa.png','유자먹고 감기조심하세요~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,14,'7gram','요거트스무디',3000,'../img/yogutSmothy.png','유기농 요거트로만든 요거트스무디!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,15,'7gram','자몽에이드',3000,'../img/jamongAide.png','자몽자몽해~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,3,100,16,'7gram','망고스무디',3000,'../img/mangoSmothy.png','망고망고해~',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,1,'7gram','아메리카노',2000,'../img/americano.png','좋은원두를 사용합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,2,'7gram','딸기스무디',3000,'../img/strawberrySmothy.png','딸기딸기 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,3,'7gram','레몬티',2000,'../img/remonTea.png','레몬레몬 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,4,'7gram','카페모카',3000,'../img/cafemoca.png','커피와 초코의 조합!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,5,'7gram','유자프라페',3000,'../img/ujaPrafa.png','유자먹고 감기조심하세요~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,6,'7gram','요거트스무디',3000,'../img/yogutSmothy.png','유기농 요거트로만든 요거트스무디!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,7,'7gram','자몽에이드',3000,'../img/jamongAide.png','자몽자몽해~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,8,'7gram','망고스무디',3000,'../img/mangoSmothy.png','망고망고해~',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
 COMMIT;
 
 
 update coupon set coupon_used='Y' 
-where member_no = #{dto.member_no} and client_no=#{dto.client_no} and menu_no = #{dto.menu_no}
+where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
+and rownum <= #{coupon_count}
+
+--쿠폰선물할때
+update coupon set member_no=#{memb24er_no},coupon_used_send='Y',coupon_send_date=SYSDATE,coupon_from=#{member_no}
+where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
 and rownum <= #{coupon_count}
 
 SELECT * FROM coupon;

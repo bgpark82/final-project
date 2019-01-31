@@ -38,7 +38,6 @@ public class UserContoller {
 	@RequestMapping("coupon_detail")
 	public String coupon_detail(Model model,int menu_no) {
 		model.addAttribute("coupon",coupon_biz.coupon_detail(menu_no));
-		//
 		model.addAttribute("list",coupon_biz.coupon_list());
 		return "userViews/couponDetail";
 	}
@@ -66,33 +65,38 @@ public class UserContoller {
 		return "userViews/myCouponDetail";
 	}
 	
+	//내 쿠폰함의 쿠폰 사용처리
 	@RequestMapping("code_correct")
 	public String code_correct(Model model,int member_no,int client_no,int menu_no,int paycode,int coupon_count,HttpServletResponse response) throws IOException {
-		System.out.println("------------------------------"+member_no+" "+client_no+" "+menu_no+" "+paycode);
+		System.out.println("------------------------------"+member_no+" "+client_no+" "+menu_no+" "+paycode+" "+coupon_count);
 		if(coupon_biz.my_coupon_use(member_no, client_no, menu_no, paycode, coupon_count)) {
-			model.addAttribute("my_coupon", coupon_biz.my_coupon_list(member_no));
-			return "userViews/myCoupon";
+			//model.addAttribute("my_coupon", coupon_biz.my_coupon_list(member_no));
+			return "redirect:my_coupon_list?member_no="+member_no;
+		}
+
+//		response.setContentType("text/html; charset=UTF-8");	 
+//		PrintWriter out = response.getWriter();
+//		out.println("<script>alert('쿠폰 사용 오류입니다.');</script>");
+//		out.flush();
+		System.out.println("여기까지오니?");
+		//model.addAttribute("my_coupon", coupon_biz.my_coupon_detail(member_no,menu_no));
+		return "redirect:my_coupon_list?member_no="+member_no;
+	}
+	
+	@RequestMapping("coupon_gift")
+	public String coupon_gift(Model model,String member_phone,int member_from_no,int member_no,int client_no,int menu_no,int coupon_count,HttpServletResponse response) throws IOException {
+		System.out.println("-----------"+member_phone+" "+member_from_no+" "+member_no+" "+client_no+" "+menu_no+" "+coupon_count);
+		if(coupon_biz.coupon_gift(member_phone,member_from_no,member_no,client_no, menu_no,coupon_count)) {
+			return "redirect:coupon_detail?menu_no="+menu_no;
 		}
 		response.setContentType("text/html; charset=UTF-8");	 
 		PrintWriter out = response.getWriter();
-		out.println("<script>alert('쿠폰 사용 오류입니다.');</script>");
+		out.println("<script>alert('쿠폰 선물 오류입니다.');</script>");
 		out.flush();
-		model.addAttribute("my_coupon", coupon_biz.my_coupon_detail(member_no,menu_no));
-		return "userViews/myCouponDetail";
+		//model.addAttribute("coupon", coupon_biz.coupon_detail(menu_no));
+		//model.addAttribute("list",coupon_biz.coupon_list());
+		return "redirect:coupon_detail?menu_no="+menu_no;
 	}
-	
-	/*
-	//내가 가진쿠폰 사용처리
-	@RequestMapping("my_coupon_use")
-	public String my_coupon_use(Model model,int member_no,int client_no,int menu_no,int paycode) {
-		//  my_coupon_use 비즈에서 다오를 두번 호출하기 (check_paycode, my_coupon_use)
-		Map<String,Object> param = coupon_biz.my_coupon_use(member_no, client_no, menu_no, paycode);
-		model.addAllAttributes(param);
-		return "userViews/myCoupon";
-	}
-	*/
-	
-	
 	
 /*	작성자 : 장세훈
 	작성 날짜 : 19.01.15

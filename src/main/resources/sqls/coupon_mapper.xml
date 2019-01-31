@@ -12,11 +12,11 @@
 	
 	<select id="coupon_detail" resultType="CouponDto" parameterType="Integer">
 	<![CDATA[ 
-		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, 
+		SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
 		(select count(*) from coupon WHERE member_no = 100 AND menu_no=#{menu_no} AND coupon_state = 'Y') as coupon_count   
 		FROM coupon 
-		WHERE menu_no=#{menu_no} AND rownum = 1
-		GROUP BY client_no, client_name, menu_no, menu_title, menu_image, menu_price
+		WHERE member_no=100 AND menu_no=#{menu_no} AND rownum = 1 
+		GROUP BY client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price
 	]]>
 	</select>
 	
@@ -55,7 +55,21 @@
 	<![CDATA[ 
 		update coupon set coupon_used='Y' 
 		where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
-		and rownum <= #{coupon_count}
+		 and coupon_used='N' and rownum <= #{coupon_count}
+	]]>
+	</update>
+	
+	
+	<select id="check_phone" parameterType="String" resultType="int">
+		select member_no from member 
+		where member_phone=#{member_phone}
+	</select>
+	
+	<update id="coupon_gift" parameterType="map">
+	<![CDATA[ 
+		update coupon set member_no=#{member_to_no},coupon_used_send='Y',coupon_send_date=SYSDATE,coupon_from=#{member_from_no}
+		where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
+		and coupon_used='N' and rownum <= #{coupon_count}
 	]]>
 	</update>
 
