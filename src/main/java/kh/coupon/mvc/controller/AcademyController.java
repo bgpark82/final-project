@@ -88,6 +88,7 @@ public class AcademyController {
 	*/
 	@RequestMapping("menuPage")
 	public String menuPage(Model model) {
+		model.addAttribute("client_list", academy_biz.client_list());
 		return "academyViews/menuPage";
 	}
 	

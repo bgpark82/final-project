@@ -69,10 +69,10 @@ CREATE TABLE client (
 	client_registration	 VARCHAR2(500)	 NOT  NULL,				
 	client_max_client	 VARCHAR2(500)	 NULL,					
 	client_reservation 	VARCHAR2(500)  NULL,
-	client_paycode NUMBER NOT NULL, -- 7그램 0000, 맥주창고 1111
-	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)
+	client_paycode NUMBER NOT NULL -- 7그램 1111, 맥주창고 2222 요술포차 3333
+	/*CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)*/
 );
-INSERT INTO client VALUES(client_seq.NEXTVAL,'22','7Grma','010-8888-9999','강남구 테헤란로11','Y','30','',1111);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'22','요술포차','010-8888-9999','강남구 테헤란로11','Y','30','',3333);
 COMMIT;
 select * from client where client_no=#{dto.client_no};
 

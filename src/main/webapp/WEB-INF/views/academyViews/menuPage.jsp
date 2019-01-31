@@ -42,9 +42,9 @@
 제휴업체를 선택해주세요.
 	<select id="client_no" onchange="getMenu_list();">
 		<option>--선택--</option>
-		<option value="1">네이버</option>
-		<option value="2">구글</option>
-		<option value="3">w3scools</option>
+		<c:forEach var="client_Dto" items="${client_list }">
+		<option value="${client_Dto.client_no }">${client_Dto.client_name }</option>
+		</c:forEach>
 	</select>
 	
 	<div id="test"></div>

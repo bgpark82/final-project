@@ -77,7 +77,7 @@ svg{
 	<select name="year">
 		<c:set var="today" value="<%=new java.util.Date()%>" />
 			<fmt:formatDate value="${today}" pattern="yyyy" var="start"/>
-        	<option value="">년도</option>
+        	<option value="">--년도--</option>
 
         <c:forEach begin="0" end="10" var="idx" step="1">
 
@@ -91,6 +91,7 @@ svg{
 	</select>
 
 	<select name="client_no">
+		<option>--선택--</option>
 		<c:forEach var="client_Dto" items="${client_list }">
 			<option value="${client_Dto.client_no }">${client_Dto.client_name}</option>
 		</c:forEach>

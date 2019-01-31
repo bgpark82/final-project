@@ -45,7 +45,7 @@
 	<select name="year">
 		<c:set var="today" value="<%=new java.util.Date()%>" />
 			<fmt:formatDate value="${today}" pattern="yyyy" var="start"/>
-        	<option value="">년도</option>
+        	<option value="">--년도--</option>
 
         <c:forEach begin="0" end="10" var="idx" step="1">
 
@@ -59,6 +59,7 @@
 	</select>
 
 	<select name="client_no">
+		<option>--선택--</option>
 		<c:forEach var="client_Dto" items="${client_list }">
 			<option value="${client_Dto.client_no }">${client_Dto.client_name}</option>
 		</c:forEach>
@@ -74,10 +75,6 @@
 
     var series = ["2019"];
  
-     /* var dataset = [ 
-        {'1':17, '2':27, '3':37, '4':27, '5':17, '6':7,  '7':9, '8':19, '9':29, '10':19, '11':9, '12':0},
-        {'1': 9, '2':19, '3':29, '4':39, '5':29, '6':19, '7':9, '8':7, '9':17, '10':27, '11':17, '12':7}]; */
-  
   	
     if(${json} != null){
   	
@@ -85,7 +82,7 @@
   	
     console.log(dataset);
     
-    /* var keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']; */
+
     var keys = d3.keys(dataset[0]);
     console.log(keys);
     var data = [];
