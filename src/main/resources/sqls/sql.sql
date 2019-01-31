@@ -52,7 +52,6 @@ CREATE TABLE member( --나(이민이)의 member_no=21, 7그램(제휴)는 22, �
 	CONSTRAINT member_uq_phone UNIQUE(member_phone),
 	CONSTRAINT member_uq_nickname UNIQUE(member_nickname),
 	CONSTRAINT member_uq_email UNIQUE(member_email),
-	CONSTRAINT member_role_chk CHECK(member_role IN('ROLE_USER','ROLE_CLIENT')),
 	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0'))
 );
 
@@ -92,6 +91,8 @@ CREATE TABLE menu(
 	menu_create_date DATE NOT NULL,
 	CONSTRAINT fk_menu FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE
 );
+
+
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
@@ -126,7 +127,7 @@ CREATE TABLE coupon (
 	coupon_used_send	 VARCHAR2(2)  NOT   NULL,		--쿠폰 선물여부
 	coupon_send_date	 DATE	 NULL,				--쿠폰 선물날짜(유저가 유저에게 선물한 날짜)
 	coupon_from	   VARCHAR2(500)	   NULL,				--쿠폰 선물 보낸 사람(조인을 피해기 위해 컬럼을 가지고있음)
-	coupon_state VARCHAR2(2) NOT NULL,
+	coupon_state VARCHAR2(2) NOT NULL,	--쿠폰 구매 요청 후 정상적인 구매가 이루어졌는지 판단 하는 컬럼
 	CONSTRAINT fk_coupon FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE,
 	CONSTRAINT fk_coupon2 FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE,
 	CONSTRAINT fk_coupon3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE
@@ -152,6 +153,88 @@ where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_n
 and rownum <= #{coupon_count}
 
 SELECT * FROM coupon;
+
+
+--구매,판매 내역 테이블
+DROP SEQUENCE coupon_history_seq;
+DROP TABLE coupon_history;
+CREATE SEQUENCE coupon_history_seq;
+CREATE TABLE coupon_history(
+	coupon_history_no NUMBER NOT NULL,			--쿠폰 구매,판매 내역의 고유번호
+	member_no NUMBER NOT NULL,					--유저 고유번호(누가 삿는지 판단)
+	client_no NUMBER NOT NULL,					--해당 쿠폰의 제휴업체 고유번호
+	menu_no NUMBER NOT NULL,					--해당 제휴업체의 메뉴번호
+	--유저 정보
+	member_name VARCHAR2(100) NOT NULL,			--유저 이름
+	--업체 정보
+	client_name VARCHAR2(100) NOT NULL,			--해당 쿠폰의 제휴업체 명(조인을 피하기 위해 가지고있는다)
+	--메뉴 정보
+	menu_title VARCHAR2(100) NOT NULL,			--해당 제휴업체의 메뉴타이틀
+	menu_price NUMBER NOT NULL,					--해당 메뉴 가격
+	--coupon_history 테이블의 기본 정보
+	coupon_history_quantity NUMBER NOT NULL,	--거래(판매,구매) 수량
+	coupon_history_date DATE NOT NULL,			--거래(판매,구매) 내역 날짜
+	coupon_history_cost NUMBER NOT NULL,		--거래(판매,구매) 비용
+	coupon_history_info VARCHAR2(100) NOT NULL	--거래 정보(판매 & 구매 판단 컬럼)
+);
+
+--학원이 쿠폰 구매시
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,100,1,1,'회계팀_장세훈','7gram','아메리카노',2000,100,SYSDATE,200000,'구매');
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,100,1,1,'회계팀_장세훈','7gram','아메리카노',2000,100,TO_DATE('2019-02-04 14:44:13','YYYY-MM-DD HH24:MI:SS'),200000,'구매');
+
+
+--학원이 쿠폰 판매시
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,100,1,1,'회계팀_장세훈','7gram','아메리카노',2000,100,TO_DATE('2019-04-04 14:44:13','YYYY-MM-DD HH24:MI:SS'),200000,'판매');
+SELECT * FROM coupon_history WHERE coupon_history_info = '판매';
+
+--학생이 쿠폰 구매시
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,1,2,1,'김단비','7gram','아메리카노',2000,1,SYSDATE,2000,'판매');
+
+--학원(쿠폰 재고 리스트)
+SELECT client_no, client_name, menu_no, menu_title, menu_price, count(*) AS coupon_count
+FROM coupon 
+WHERE member_no = 100 AND coupon_state = 'N' AND client_no = 2 AND menu_no = 1
+GROUP BY client_no, client_name, menu_no, menu_title, menu_price
+ORDER BY client_no;
+
+--구매요청(coupon 테이블에 쿠폰이 생기지만 coupon_state 값은 N 이다)
+INSERT INTO coupon VALUES(coupon_seq.nextval,100,2,1,'맥주창고','점심쿠폰',4000,NULL,'다양한 음식을 준비합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+
+--구매 요청 내역
+SELECT client_no,client_name, menu_no, menu_title, menu_price, count(*) AS coupon_count, sum(menu_price) AS total_amount
+FROM coupon 
+WHERE member_no = 100 AND coupon_state = 'N'
+GROUP BY client_no, client_name, menu_no, menu_title, menu_price
+ORDER BY client_no;
+
+--구매내역
+SELECT coupon_history_no, member_no, member_name, client_no, client_name, menu_no, menu_title, coupon_history_quantity, coupon_history_cost, coupon_history_date 
+FROM coupon_history 
+WHERE coupon_history_info = '구매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND EXTRACT(month FROM coupon_history_date) = 1;
+--AND client_no = '1' 업체별로 볼때 조건에 추가
+--AND EXTRACT(day FROM coupon_history_date) = 1 
+
+SELECT EXTRACT(month FROM coupon_history_date) FROM COUPON_HISTORY
+
+
+--2019년 7gram 월별 구매 통계
+SELECT SUM(coupon_history_quantity) FROM coupon_history WHERE coupon_history_info = '구매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND client_no = 1 GROUP BY TO_CHAR(coupon_history_date,'MM') ORDER BY TO_CHAR(coupon_history_date,'MM');
+
+----2019년 7gram 월별 판매 통계
+SELECT SUM(coupon_history_quantity) FROM coupon_history WHERE coupon_history_info = '판매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND client_no = 1 GROUP BY TO_CHAR(coupon_history_date,'MM') ORDER BY TO_CHAR(coupon_history_date,'MM');
+
+
+
+--판매내역
+SELECT coupon_history_no, member_no, member_name, client_no, client_name, menu_no,menu_title, coupon_history_quantity, coupon_history_cost, coupon_history_date 
+FROM coupon_history 
+WHERE member_no = 1 AND coupon_history_info = '판매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND EXTRACT(month FROM coupon_history_date) = 1;
+--AND EXTRACT(day FROM coupon_history_date) = 1 
+
+
+
+
+
 -----------------------------------------------
 CREATE TABLE board (
 	board_no	NUMBER	NOT NULL,								
