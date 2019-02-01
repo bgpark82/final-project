@@ -116,9 +116,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
 		</dependency>
 
 		<!-- Test -->
@@ -215,6 +215,8 @@
 			<artifactId>taglibs-standard-impl</artifactId>
 			<version>1.2.5</version>
 		</dependency>
+		
+		
 	</dependencies>
 	<build>
 		<plugins>
