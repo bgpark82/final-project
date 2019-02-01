@@ -2,4 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="user">
 
+
+<select id="client_list" resultType="ClientDto">
+	SELECT * FROM client WHERE client_reservation  = 'Y' AND client_registration = 'Y'
+</select>
+
+
+<select id="client_detail" parameterType="int" resultType="ClientDto">
+	SELECT * FROM client WHERE client_no = #{client_no}
+</select>
+
+<select id="menu_list" resultType="MenuDto">
+	SELECT * FROM menu WHERE client_no = #{client_no}
+</select>
+
+<insert id="reservation" parameterType="MemberReservationDto">
+	INSERT INTO member_reservation VALUES(member_reservation_seq.NEXTVAL,#{member_no},#{client_no},#{member_phone},SYSDATE,#{reservation_date},#{reservation_people},#{reservation_time},#{reservation_confirm},#{reservation_memo},#{reservation_reject})
+</insert>
+
+<select id="reservation_status" parameterType="int" resultType="MemberReservationDto">
+	SELECT * FROM member_reservation WHERE member_no = #{member_no}
+</select>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <insert id="menu_reservation_insert" parameterType="MemberReservationDto">
+	INSERT INTO member_reservation VALUES(member_reservation_seq.NEXTVAL, #{member_no}, #{client_no}, #{member_phone}, SYSDATE, #{reservation_date}, #{reservation_people}, #{reservation_time}, #{reservation_confirm}, #{reservation_memo}, #{reservation_reject})
+</insert>
+ -->
+
+
 </mapper>

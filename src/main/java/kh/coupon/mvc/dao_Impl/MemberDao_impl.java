@@ -1,9 +1,10 @@
-package kh.coupon.mvc.dao;
+package kh.coupon.mvc.dao_Impl;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kh.coupon.mvc.dao.MemberDao;
 import kh.coupon.mvc.dto.MemberDto;
 
 @Repository

@@ -15,9 +15,16 @@
 	<%@ include file="./form/header.jsp" %>
 
 	<security:authorize access="hasRole('USER')">
-		<a href="${Context.request.contextPage }/user/coupone_list">쿠폰 리스트</a>
+		<a href="../user/client_list">예약가능한 제휴업체 리스트</a>
 		
 	</security:authorize>
+
+<%-- 
+	<security:authorize access="hasRole('USER')">
+		<a href="../user/magic_list">쿠폰 리스트</a>
+		
+	</security:authorize>
+--%>
 	
 	
 	<security:authorize access="hasRole('CLIENT')">
