@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="coupon">
+
+	<select id="coupon_list" resultType="CouponDto">
+		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, count(*) AS coupon_count
+		FROM coupon 
+		WHERE member_no = 100 AND coupon_state = 'Y' 
+		GROUP BY client_no, client_name, menu_no, menu_title, menu_image, menu_price
+		ORDER BY client_no
+	</select>
+	
+	<select id="coupon_detail" resultType="CouponDto" parameterType="Integer">
+	<![CDATA[ 
+		SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
+		(select count(*) from coupon WHERE member_no = 100 AND menu_no=#{menu_no} AND coupon_state = 'Y') as coupon_count   
+		FROM coupon 
+		WHERE member_no=100 AND menu_no=#{menu_no} AND rownum = 1 
+		GROUP BY client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price
+	]]>
+	</select>
+	
+	
+	<update id="coupon_buy" parameterType="map">
+	<![CDATA[ 
+		UPDATE coupon 
+		SET member_no = #{member_no}
+		WHERE member_no = 100 AND client_no = #{client_no} AND menu_no = #{menu_no} AND 	
+		rownum <= #{coupon_count}
+	]]>
+	</update>
+	
+	<select id="my_coupon_list"  parameterType="Integer" resultType="CouponDto">
+		SELECT menu_no,client_name,menu_title,menu_price,count(*) AS coupon_count
+		FROM coupon 
+		WHERE member_no = #{member_no} AND coupon_used = 'N' 
+		GROUP BY menu_no,client_name,menu_title,menu_price
+	</select>
+	
+	<select id="my_coupon_detail" resultType="CouponDto" parameterType="map">
+	<![CDATA[ 
+		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, 
+		(select count(*) from coupon WHERE member_no = #{member_no} AND menu_no=#{menu_no} AND coupon_used = 'N') as coupon_count   
+		FROM coupon 
+		WHERE member_no=#{member_no} AND menu_no=#{menu_no} AND rownum = 1
+		GROUP BY client_no, client_name, menu_no, menu_title, menu_image, menu_price
+	]]>
+	</select>
+	
+	<select id="check_paycode" parameterType="map" resultType="ClientDto">
+		select * from client where client_no=#{client_no}
+	</select>
+	
+	<update id="my_coupon_use" parameterType="map">
+	<![CDATA[ 
+		update coupon set coupon_used='Y' 
+		where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
+		 and coupon_used='N' and rownum <= #{coupon_count}
+	]]>
+	</update>
+	
+	
+	<select id="check_phone" parameterType="String" resultType="int">
+		select member_no from member 
+		where member_phone=#{member_phone}
+	</select>
+	
+	<update id="coupon_gift" parameterType="map">
+	<![CDATA[ 
+		update coupon set member_no=#{member_to_no},coupon_used_send='Y',coupon_send_date=SYSDATE,coupon_from=#{member_from_no}
+		where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
+		and coupon_used='N' and rownum <= #{coupon_count}
+	]]>
+	</update>
+
+</mapper>

@@ -8,6 +8,6 @@
 </head>
 <body>
 	<h2>여기는 AcademyController의 test메소드의 리턴페이지입니다.</h2>
-	<h1>깃</h1>
+	<a href="../academy/coupon_stock">회계팀 로그인</a>
 </body>
 </html>
