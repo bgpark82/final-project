@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="complain">
+
+   <select id="complain_list" resultType="ComplainDto">
+      SELECT * FROM complain_board ORDER BY complain_no DESC
+   </select>
+   
+   	<select id="complain_list_seven" resultType="ComplainDto">
+		SELECT complain_no,complain_category,complain_title,complain_date_create,complain_count,complain_like FROM complain_board WHERE complain_category='7Gram' ORDER BY complain_no DESC
+	</select>
+	
+	<select id="complain_list_bear" resultType="ComplainDto">
+		SELECT complain_no,complain_category,complain_title,complain_date_create,complain_count,complain_like FROM complain_board WHERE complain_category='맥주창고' ORDER BY complain_no DESC
+	</select>
+	
+	<select id="complain_list_magic" resultType="ComplainDto">
+		SELECT complain_no,complain_category,complain_title,complain_date_create,complain_count,complain_like FROM complain_board WHERE complain_category='요술포차' ORDER BY complain_no DESC
+	</select>
+   
+   <select id="complain_detail" resultType="ComplainDto" parameterType="int">
+      SELECT complain_no,complain_writer,complain_category,complain_title,complain_content,complain_date_create,complain_count FROM complain_board WHERE complain_no=#{complain_no}
+   </select>
+   
+   <insert id="complain_insert" parameterType="ComplainDto">
+      INSERT INTO complain_board VALUES(complain_board_seq.NEXTVAL,#{complain_category},#{complain_title},#{complain_content},#{complain_writer},SYSDATE,SYSDATE,#{complain_count},#{complain_like})
+   </insert>
+   
+   <update id="complain_update" parameterType="ComplainDto">
+      UPDATE complain_board SET complain_category=#{complain_category}, complain_title=#{complain_title}, complain_content=#{complain_content}, complain_date_create=SYSDATE WHERE complain_no =#{complain_no}
+   </update>
+   
+   <delete id="complain_delete" parameterType="int">
+      DELETE FROM complain_board WHERE complain_no=#{complain_no}
+   </delete>
+   
+   <update id="updateHit" parameterType="int">
+      UPDATE complain_board SET complain_count = complain_count + 1 WHERE complain_no = #{complain_no}
+   </update>
+   
+</mapper>

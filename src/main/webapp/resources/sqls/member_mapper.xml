@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="member">
+
+   <select id="regist_list" resultType="RegistDto">
+      SELECT member_name,member_id,member_password FROM member
+   </select>
+   
+   <select id="regist_detail" resultType="RegistDto" parameterType="String">
+      SELECT member_name,member_id,member_password FROM member WHERE member_id=#{member_id}
+   </select>
+   
+   <insert id="regist_insert" parameterType="RegistDto">
+      INSERT INTO member VALUES(member_seq.NEXTVAL,#{member_name},#{member_id},#{member_password})
+   </insert>
+   
+   <select id="login" resultType="RegistDto" parameterType="RegistDto">
+      SELECT member_no,member_name,member_id,member_password FROM member WHERE member_id= #{member_id} AND member_password =#{member_password}
+   </select>
+   
+   <select id="loginInfo" parameterType="int" resultType="RegistDto">	
+	SELECT * FROM MEMBER WHERE MEMBER_NO = #{member_no}
+</select>
+
+</mapper>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="review">
+
+	<select id="review_list" resultType="ReviewDto">
+		SELECT review_no,review_category,review_title,review_date_create,review_count,review_like FROM review_board ORDER BY review_no DESC
+	</select>
+	
+	<select id="review_list_seven" resultType="ReviewDto">
+		SELECT review_no,review_category,review_title,review_date_create,review_count,review_like FROM review_board WHERE review_category='7Gram' ORDER BY review_no DESC
+	</select>
+	
+	<select id="review_list_bear" resultType="ReviewDto">
+		SELECT review_no,review_category,review_title,review_date_create,review_count,review_like FROM review_board WHERE review_category='맥주창고' ORDER BY review_no DESC
+	</select>
+	
+	<select id="review_list_magic" resultType="ReviewDto">
+		SELECT review_no,review_category,review_title,review_date_create,review_count,review_like FROM review_board WHERE review_category='요술포차' ORDER BY review_no DESC
+	</select>
+	
+	<select id="review_detail" resultType="ReviewDto" parameterType="int">
+		SELECT review_no,review_writer,review_category,review_title,review_content FROM review_board WHERE review_no=#{review_no}
+	</select>
+	
+	<insert id="review_insert" parameterType="ReviewDto">
+		INSERT INTO review_board VALUES(review_board_seq.NEXTVAL,#{review_category},#{review_title},#{review_content},#{review_writer},SYSDATE,SYSDATE,#{review_count},#{review_like})
+	</insert>
+	
+	<update id="review_update" parameterType="ReviewDto">
+		UPDATE review_board SET review_category=#{review_category}, review_title=#{review_title}, review_content=#{review_content}, review_date_create=SYSDATE WHERE review_no =#{review_no}
+	</update>
+	
+	<delete id="review_delete" parameterType="int">
+		DELETE FROM review_board WHERE review_no=#{review_no}
+	</delete>
+	
+	<update id="updateHit" parameterType="int">
+		UPDATE review_board SET review_count = review_count + 1 WHERE review_no = #{review_no}
+	</update>
+	
+</mapper>

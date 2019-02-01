@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="menu">
+
+<select id="menu_list" parameterType="int" resultType="MenuDto">
+	SELECT * FROM menu WHERE client_no = #{client_no}
+</select>
+
+<select id="menu_selectone" parameterType="int" resultType="MenuDto">
+	SELECT * FROM menu WHERE menu_no = #{menu_no}
+</select>
+
+<update id="menu_update" parameterType="MenuDto">
+	UPDATE menu SET menu_title = #{menu_title}, menu_price = #{menu_price}, menu_detail = #{menu_detail} WHERE menu_no = #{menu_no}
+</update>
+
+<delete id="menu_delete" parameterType="MenuDto">
+	DELETE FROM menu WHERE menu_no = #{menu_no}
+</delete>
+
+<insert id="menu_insert" parameterType="MenuDto">
+	INSERT INTO menu VALUES(menu_no_seq.NEXTVAL, #{client_no}, #{menu_title}, #{menu_price}, #{menu_image}, #{menu_detail}, SYSDATE)
+</insert>
+
+</mapper>
