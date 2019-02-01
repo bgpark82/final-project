@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>여기는 AcademyController의 test메소드의 리턴페이지입니다.</h2>
-	<a href="../academy/coupon_stock">회계팀 로그인</a>
+	<h2>여기는 AcademyController의 test메소드의 리턴페이지입니다.</h2> 
 </body>
 </html>
