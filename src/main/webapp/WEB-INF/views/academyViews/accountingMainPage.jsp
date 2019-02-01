@@ -51,7 +51,7 @@
 						<td>${coupon.menu_price} </td>
 						<td>${coupon.coupon_count }</td>
 						<!-- member_no는 사용자 검색을 통해 값을 가져와서 보내주도록 바꾸자. -->
-						<td><input type="button" value="구매" onclick="a href='../academy/coupon_purchase_form?member_no=100&client_no=${coupon.client_no}&menu_no=${coupon.menu_no }&client_name=${coupon.client_name }'"></td>
+<%-- 						<td><input type="button" value="구매" onclick="a href='../academy/coupon_purchase_form?member_no=100&client_no=${coupon.client_no}&menu_no=${coupon.menu_no }&client_name=${coupon.client_name }'"></td> --%>
 					
 						
 					</tr>

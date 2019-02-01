@@ -54,10 +54,14 @@ CREATE TABLE member( --나(이민이)의 member_no=21, 7그램(제휴)는 22, �
 	CONSTRAINT member_uq_email UNIQUE(member_email),
 	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0'))
 );
-
+INSERT INTO member VALUES(1,'김회계','test11','test11',NULL,'1',SYSDATE,NULL,NULL,NULL,'1@1','ROLE_ACCOUNT',NULL,NULL,'1' );
+INSERT INTO member VALUES(2,'이홍보','test22','test22',NULL,'2',SYSDATE,NULL,NULL,NULL,'2@2','ROLE_PROMOTION',NULL,NULL,'1' );
+INSERT INTO member VALUES(3,'박운영','test33','test33',NULL,'3',SYSDATE,NULL,NULL,NULL,'3@3','ROLE_OPERATION',NULL,NULL,'1' );
+UPDATE MEMBER SET member_no = 100 WHERE MEMBER_NO=1;
+UPDATE member SET member_role = 'ROLE_ACCOUNT' WHERE member_id = '11';
 SELECT * FROM MEMBER;
 -------------------------------------------------------
-DROP TABLE client;
+DROP TABLE client CASCADE CONSTRAINT;
 DROP SEQUENCE client_seq;
 CREATE SEQUENCE client_seq;
 CREATE TABLE client (
@@ -69,21 +73,25 @@ CREATE TABLE client (
 	client_registration	 VARCHAR2(500)	 NOT  NULL,				
 	client_max_client	 VARCHAR2(500)	 NULL,					
 	client_reservation 	VARCHAR2(500)  NULL,
-	client_paycode NUMBER NOT NULL -- 7그램 1111, 맥주창고 2222 요술포차 3333
-	/*CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)*/
+	client_paycode NUMBER NOT NULL, -- 7그램 1111, 맥주창고 2222 요술포차 3333
+	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)
 );
-INSERT INTO client VALUES(client_seq.NEXTVAL,'22','요술포차','010-8888-9999','강남구 테헤란로11','Y','30','',3333);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'100','7gram','010-8888-9999','강남구 테헤란로11','Y','30','',1111);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'2','맥주창고','010-8888-9999','강남구 테헤란로11','Y','30','',2222);
+
+INSERT INTO client VALUES(client_seq.NEXTVAL,'3','요술포차','010-8888-9999','강남구 테헤란로11','Y','30','',3333);
 COMMIT;
 select * from client where client_no=#{dto.client_no};
-
+SELECT * FROM client;
 ------------------세훈오빠가 만든 메뉴 테이블---------------
 
-DROP TABLE menu;
+DROP TABLE menu CASCADE CONSTRAINT;
 DROP SEQUENCE menu_seq;
 CREATE SEQUENCE menu_seq;
 CREATE TABLE menu(
 	menu_no NUMBER PRIMARY KEY,
 	client_no NUMBER NOT NULL, --7gram은 고유번호를 1로해놓자 일단
+	client_name VARCHAR2(500) NOT NULL,
 	menu_title VARCHAR2(500) NOT NULL,
 	menu_price NUMBER NOT NULL,
 	menu_image VARCHAR2(500) NULL,
@@ -93,14 +101,14 @@ CREATE TABLE menu(
 );
 
 
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
 COMMIT;
 SELECT * FROM menu;
 
@@ -127,10 +135,10 @@ CREATE TABLE coupon (
 	coupon_used_send	 VARCHAR2(2)  NOT   NULL,		--쿠폰 선물여부
 	coupon_send_date	 DATE	 NULL,				--쿠폰 선물날짜(유저가 유저에게 선물한 날짜)
 	coupon_from	   VARCHAR2(500)	   NULL,				--쿠폰 선물 보낸 사람(조인을 피해기 위해 컬럼을 가지고있음)
-	coupon_state VARCHAR2(2) NOT NULL,	--쿠폰 구매 요청 후 정상적인 구매가 이루어졌는지 판단 하는 컬럼
-	CONSTRAINT fk_coupon FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE,
+	coupon_state VARCHAR2(2) NOT NULL	--쿠폰 구매 요청 후 정상적인 구매가 이루어졌는지 판단 하는 컬럼
+/*	CONSTRAINT fk_coupon FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE,
 	CONSTRAINT fk_coupon2 FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE,
-	CONSTRAINT fk_coupon3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE
+	CONSTRAINT fk_coupon3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE*/
 );
 INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,1,'7gram','아메리카노',2000,'../img/americano.png','좋은원두를 사용합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
 INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,2,'7gram','딸기스무디',3000,'../img/strawberrySmothy.png','딸기딸기 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');

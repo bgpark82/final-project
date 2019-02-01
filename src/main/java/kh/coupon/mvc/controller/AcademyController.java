@@ -102,7 +102,10 @@ public class AcademyController {
 	@RequestMapping("menu_list")
 	@ResponseBody
 	public Map<String, Object> menuList(int client_no) {
+		System.out.println(client_no);
+		
 		List<Menu> menu_list = academy_biz.menu_list(client_no);
+		System.out.println("menu사이즈"+menu_list.size());
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("menu_list", menu_list);
@@ -116,7 +119,7 @@ public class AcademyController {
 	사용하는 DB 테이블 : menu 
 	부가 설명 :	
 	*/
-	@RequestMapping("coupon_purchse_form")
+	@RequestMapping("coupon_purchase_form")
 	public String coupon_purchase_form(Model model, int client_no) {
 		//menu 테이블에 munu 정보 가져오기 
 		model.addAttribute("menu_list",academy_biz.menu_list(client_no));

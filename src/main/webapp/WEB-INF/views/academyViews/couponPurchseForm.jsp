@@ -31,8 +31,8 @@
 	
 	function coupon_purchase_order(){
 		//유저 번
-		var member_no = 100;
-		var member_name = "회계팀_장세훈";
+		var member_no = '${user.member_no}';
+		var member_name = '${user.member_name}';
 		var menu_info = $("#menu_info").val().split(",");
 		var client_no = menu_info[0];
 		var client_name = menu_info[1];

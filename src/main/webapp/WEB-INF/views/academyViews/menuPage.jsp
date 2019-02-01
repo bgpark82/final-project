@@ -10,11 +10,16 @@
 <script type="text/javascript">
 	function getMenu_list(){
 		var client_no = $("#client_no").val();
-		
+		alert(client_no);
 			$.ajax({
 				type:"post",
 				url:"../academy/menu_list",
 				data:"client_no="+client_no,
+
+				beforeSend : function(xhr)
+                {   
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
 				success:function(data){
 					$("tbody").empty();
 					values = data.menu_list; //java에서 정의한 ArrayList명을 적어준다.
@@ -59,6 +64,6 @@
 		<tbody>
 		</tbody>
 	</table>
-	<input type="button" value="구매" onclick="location.href='coupon_purchse_form?client_no=1'"/>
+
 </body>
 </html>
