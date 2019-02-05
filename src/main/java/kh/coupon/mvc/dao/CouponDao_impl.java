@@ -30,6 +30,18 @@ public class CouponDao_impl implements CouponDao {
 		}
 		return res;
 	}
+	
+	@Override
+	public List<CouponDto> beer_list(){
+		List<CouponDto> res = null;
+		try {
+			res = sqlSessionTemplate.selectList(namespace+"beer_list");		
+		} catch(Exception e) {
+			System.out.println("daoImpl beer_list 오류");
+			e.printStackTrace();
+		}
+		return res;
+	}
 
 	@Override
 	public CouponDto coupon_detail(int menu_no) {

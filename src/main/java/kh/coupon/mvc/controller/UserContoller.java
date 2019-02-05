@@ -2,20 +2,22 @@ package kh.coupon.mvc.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kh.coupon.mvc.biz.CouponBiz;
+import kh.coupon.mvc.biz.ExpenseStatementBiz;
 import kh.coupon.mvc.biz.MemberBiz;
-import kh.coupon.mvc.dto.MemberDto;
+import kh.coupon.mvc.biz.ReviewBiz;
+import kh.coupon.mvc.dto.ReviewDto;
 
 @Controller
 @RequestMapping("user")
@@ -23,16 +25,33 @@ public class UserContoller {
 	
 	@Autowired
 	private CouponBiz coupon_biz;
+	@Autowired
+	private MemberBiz member_biz;
+	@Autowired
+	private ReviewBiz review_biz;
+	@Autowired
+	private ExpenseStatementBiz expenseBiz;
 	
 	@RequestMapping("coupone")
 	public String coupone() {
 		return "userViews/coupone";
 	}
 	
+	@RequestMapping("client_list")
+	public String client_list() {
+		return "userViews/clientList";
+	}
+	
 	@RequestMapping("coupon_list")
 	public String coupon_list(Model model) {
 		model.addAttribute("list",coupon_biz.coupon_list());
 		return "userViews/coupon_list";
+	}
+	
+	@RequestMapping("beer_list")
+	public String beer_list(Model model) {
+		model.addAttribute("list",coupon_biz.beer_list());
+		return "userViews/beerList";
 	}
 	
 	@RequestMapping("coupon_detail")
@@ -107,6 +126,130 @@ public class UserContoller {
 	public String test() {
 		return "userViews/userControllerTest";
 	}
+//------------------------마이페이지-----------------
+	
+/*  작성자 : 이민이
+	작성 날짜 : 2019.02.02
+	기능 : 회원 탈퇴, 지출내역, 내정보수정을 할 수 있는 학생 마이페이지
+	사용하는 DB 테이블 : 
+*/
+	
+	@RequestMapping("mypage")
+	public String mypage(Model model) {
+		model.addAttribute("my");
+		return "userViews/myPage";
+	}
+	
+	
+//---------------------------------이용후기&공지사항 게시판--------------------------------------------------------------------
 		
-
+	@RequestMapping("review_board_list")
+	public String review_board_list(Model model) {
+		model.addAttribute("list",review_biz.review_list());
+		return "userViews/reviewBoardList";
+	} 
+	
+	@RequestMapping("board_list")
+	public String board_list(Model model) {
+		model.addAttribute("list",review_biz.board_list());
+		return "userViews/boardList";
+	} 
+	
+	// 후기게시판에서 제휴업체 구분 검색
+	@RequestMapping("review_search")
+	public String review_search(Model model,int client_no,HttpServletRequest req) {
+		System.out.println("제휴업체구분 : " +client_no);
+		if(client_no == 1) {
+			model.addAttribute("list", review_biz.review_list_seven());			
+		} else if(client_no == 2) {
+			model.addAttribute("list", review_biz.review_list_bear());
+		} else if(client_no == 3) {
+			model.addAttribute("list", review_biz.review_list_magic());
+		} else if(client_no == 0){
+			model.addAttribute("list", review_biz.review_list());
+		}
+		req.setAttribute("client_no", client_no);
+		return "userViews/reviewBoardList";
+	}
+	
+	@RequestMapping("review_detail")
+	public String review_detail(Model model,int board_no) {
+		review_biz.updateHit(board_no);
+		model.addAttribute("dto",review_biz.review_detail(board_no));
+		return "userViews/reviewBoardDetail";
+	}
+	
+	@RequestMapping("board_detail")
+	public String board_detail(Model model,int board_no) {
+		review_biz.updateHit(board_no);
+		model.addAttribute("dto",review_biz.review_detail(board_no));
+		return "userViews/boardDetail";
+	}
+	
+	@RequestMapping(value="review_insertform")
+	public String review_insertform(Model model, int client_no) {
+		model.addAttribute("client_no",client_no);
+		return "userViews/reviewBoardInsert";
+	}
+	
+	@RequestMapping(value="review_insert", method=RequestMethod.POST)
+	public String review_insert(Model model,ReviewDto review_dto,HttpServletRequest request) {
+		int res = review_biz.review_insert(review_dto);
+		if(res>0) {
+			model.addAttribute("list",review_biz.review_list());
+			return "userViews/reviewBoardList";
+		} else {
+			return "userViews/reviewBoardInsert";
+		}
+	}
+	
+	@RequestMapping("review_updateform")
+	public String review_updateform(Model model,int board_no) {
+		model.addAttribute("dto",review_biz.review_detail(board_no));
+		System.out.println(board_no);
+		return "userViews/reviewBoardUpdate";
+	}
+	
+	@RequestMapping(value="review_update", method=RequestMethod.POST)
+	public String review_update(Model model,ReviewDto review_dto,int board_no) {
+		int res = review_biz.review_update(review_dto);
+		if(res>0) {
+			model.addAttribute("dto",review_biz.review_detail(board_no));
+			return "userViews/reviewBoardDetail";
+		} else {
+			return "userViews/reviewBoardUpdate";
+		}
+	}
+	
+	@RequestMapping("review_delete")
+	public String review_delete(Model model,int board_no) {
+		review_biz.review_delete(board_no);
+		model.addAttribute("list",review_biz.review_list());
+		return "userViews/reviewBoardList";
+	}
+	
+//---------------------지출내역----------------------------
+	
+	//월별 지출내역 페이지로 넘어가기  
+		@RequestMapping(value="expense")
+		public String expenseStatement(Model model, int member_no, String year, String month ) {
+			
+			model.addAttribute("dto", expenseBiz.monthlyExpenseStatement(member_no, year, month));
+			
+			return "userViews/expenseStatement";
+		}
+		
+		//년과 월을 설정해해서 조회
+		@RequestMapping(value="search_expense")
+		public String searchExpense(Model model, int year, int month, int member_no) {
+			
+			String year1 = String.valueOf(year);
+			String month1 = String.valueOf(month);
+					
+			model.addAttribute("dto",expenseBiz.monthlyExpenseStatement(member_no, year1, month1));
+			
+			
+			return "userViews/expenseStatement";
+		}  
+	
 }

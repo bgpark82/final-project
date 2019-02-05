@@ -15,8 +15,11 @@
 	<%@ include file="./form/header.jsp" %>
 
 	<security:authorize access="hasRole('USER')">
-		<a href="../user/coupon_list">쿠폰 리스트</a>
+		<a href="../user/client_list">제휴업체 리스트</a>
 		<a href="../user/my_coupon_list?member_no=${user.member_no }">내 쿠폰함</a>
+		<a href="../user/mypage?member_no=${user.member_no }">마이페이지</a>
+		<a href="../user/review_board_list">이용후기</a>
+		<a href="../user/board_list">공지사항</a>
 	</security:authorize>
 	
 	

@@ -11,6 +11,7 @@ import kh.coupon.mvc.dto.CouponDto;
 public interface CouponBiz {
 	
 	public List<CouponDto> coupon_list();
+	public List<CouponDto> beer_list();
 	public CouponDto coupon_detail(int menu_no);
 	public int coupon_buy(int member_no, int client_no, int menu_no, int coupon_count);
 	public List<CouponDto> my_coupon_list(int member_no);

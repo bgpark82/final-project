@@ -16,7 +16,7 @@
 	자동 로그인 <input type="checkbox" name="remember-me"/>
 	
 	<input type="submit" value="로그인">
-	<input type="button" value="회원가입" onclick="location.href='home/registerPage'">
+	<input type="button" value="회원가입" onclick="location.href='${pageContext.request.contextPath }/home/registerPage'">
 </form:form>
 
 	<c:if test="${param.error != null }">

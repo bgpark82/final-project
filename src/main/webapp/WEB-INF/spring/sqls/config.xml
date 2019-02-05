@@ -6,6 +6,8 @@
 		<typeAlias alias="MemberDto" type="kh.coupon.mvc.dto.MemberDto"/>
 		<typeAlias alias="CouponDto" type="kh.coupon.mvc.dto.CouponDto"/>
 		<typeAlias alias="ClientDto" type="kh.coupon.mvc.dto.ClientDto"/>
+		<typeAlias alias="ReviewDto" type="kh.coupon.mvc.dto.ReviewDto"/>
+		<typeAlias alias="CouponHistoryDto" type="kh.coupon.mvc.dto.CouponHistoryDto"/>
 	</typeAliases>
 		
 	<mappers>
@@ -15,5 +17,7 @@
 		<mapper resource="/sqls/academy_mapper.xml"/>
 		<mapper resource="/sqls/client_mapper.xml"/>
 		<mapper resource="/sqls/coupon_mapper.xml"/>
+		<mapper resource="/sqls/review_mapper.xml"/>
+		<mapper resource="/sqls/expense_mapper.xml"/>
 	</mappers>
 </configuration>

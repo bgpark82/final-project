@@ -27,6 +27,8 @@ public class SuccessHandle implements AuthenticationSuccessHandler{
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res, Authentication auth)
 			throws IOException, ServletException {
+		req.setCharacterEncoding("UTF-8");
+		res.setContentType("text/html; charset=UTF-8");
 		HttpSession session = req.getSession();
 		User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		MemberDto dto = new MemberDto();

@@ -77,7 +77,8 @@ $(document).ready(function(){
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">
-				<b>7Gram 쿠폰목록 </b><small> 원하는 메뉴의 쿠폰을 구매하세요!</small>
+				<b>7Gram 쿠폰목록 </b><small> 원하는 메뉴의 쿠폰을 구매하세요!</small> 
+				<button class="btn btn-default" onclick="location.href='../home/main'">메인으로</button>
 			</h1>
 		</div>
 	</div>

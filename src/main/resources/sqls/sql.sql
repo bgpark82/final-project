@@ -26,34 +26,34 @@
 ====================================================
 */
 
-DROP TABLE member; -- member_no에서 2는 제휴업체라하자
+DROP TABLE member; 
 DROP SEQUENCE member_seq;
 
 CREATE SEQUENCE member_seq;
 
-CREATE TABLE member( --나(이민이)의 member_no=21, 7그램(제휴)는 22, 학원은 100으로 하자
-	member_no	 NUMBER	 NOT  NULL,									
-	member_name	 VARCHAR2(500) 	NOT  NULL,						
-	member_id	 VARCHAR2(500) 	NOT  NULL,							
-	member_password	 VARCHAR2(500) 	NOT  NULL,					
-	member_profile 	VARCHAR2(500)	 NULL,						
-	member_phone	 VARCHAR2(500)	 NOT  NULL,						
-	member_date_create	 DATE	 NOT  NULL,						
-	member_date_update  	DATE	 NULL,							
-	member_nickname 	VARCHAR2(500)	 NULL,						
-	member_class 	VARCHAR2(500) 	NULL,						
-	member_email	 VARCHAR2(500)	 NOT  NULL,						
-	member_role	 VARCHAR2(500)	 NOT  NULL,						
-	member_withdraw 	VARCHAR2(500)	 NULL,						
-	member_date_withdraw 	DATE	 NULL,							
-	member_enabled	 CHAR(2) 	NOT  NULL,
-	CONSTRAINT member_pk PRIMARY KEY(member_no),
-	CONSTRAINT member_uq_id UNIQUE(member_id),
-	CONSTRAINT member_uq_phone UNIQUE(member_phone),
-	CONSTRAINT member_uq_nickname UNIQUE(member_nickname),
-	CONSTRAINT member_uq_email UNIQUE(member_email),
-	CONSTRAINT member_role_chk CHECK(member_role IN('ROLE_USER','ROLE_CLIENT')),
-	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0'))
+CREATE TABLE member( --학원의 member_no는 임의로 10000이라하자
+	member_no	 NUMBER	 NOT  NULL,		--사용자 고유번호							
+	member_name	 VARCHAR2(500) 	NOT  NULL,	--이름					
+	member_id	 VARCHAR2(500) 	NOT  NULL,	--아이디						
+	member_password	 VARCHAR2(500) 	NOT  NULL,	--비밀번호				
+	member_profile 	VARCHAR2(500)	 NULL,	--프로필사진					
+	member_phone	 VARCHAR2(500)	 NOT  NULL,	--전화번호					
+	member_date_create	 DATE	 NOT  NULL,		--회원가입 날짜	
+	member_date_update  	DATE	 NULL,		--내정보 수정일					
+	member_nickname 	VARCHAR2(500)	 NULL,	-- 닉네임		
+	member_class 	VARCHAR2(500) 	NULL,		--학생이 소속된 반				
+	member_email	 VARCHAR2(500)	 NOT  NULL,		-- 이메일
+	member_role	 VARCHAR2(500)	 NOT  NULL,		--학생,제휴업체	
+	member_withdraw 	VARCHAR2(500)	NULL,	--회원탈퇴여부					
+	member_date_withdraw 	DATE	 NULL,		--회원탈퇴날짜					
+	member_enabled	 CHAR(2) 	NOT  NULL,  --1이면회원 0이면 탈퇴한회원
+	CONSTRAINT member_pk PRIMARY KEY(member_no) ON DELETE CASCADE,
+	CONSTRAINT member_uq_id UNIQUE(member_id) ON DELETE CASCADE,
+	CONSTRAINT member_uq_phone UNIQUE(member_phone) ON DELETE CASCADE,
+	CONSTRAINT member_uq_nickname UNIQUE(member_nickname) ON DELETE CASCADE,
+	CONSTRAINT member_uq_email UNIQUE(member_email) ON DELETE CASCADE,
+	CONSTRAINT member_role_chk CHECK(member_role IN('ROLE_USER','ROLE_CLIENT')) ON DELETE CASCADE,
+	CONSTRAINT member_enabled_chk CHECK(member_enabled IN('1','0')) ON DELETE CASCADE
 );
 
 SELECT * FROM MEMBER;
@@ -62,21 +62,23 @@ DROP TABLE client;
 DROP SEQUENCE client_seq;
 CREATE SEQUENCE client_seq;
 CREATE TABLE client (
-	client_no	 NUMBER 	PRIMARY KEY,								
-	member_no	 NUMBER 	NOT  NULL,													
-	client_name	 VARCHAR2(500) 	 NOT  NULL,				
-	client_tel	 VARCHAR2(500)	 NULL,					
-	client_address	 VARCHAR2(500)	 NOT  NULL,					
-	client_registration	 VARCHAR2(500)	 NOT  NULL,				
-	client_max_client	 VARCHAR2(500)	 NULL,					
-	client_reservation 	VARCHAR2(500)  NULL,
-	client_paycode NUMBER NOT NULL, -- 7그램 0000, 맥주창고 1111
-	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)
+	client_no	 NUMBER 	PRIMARY KEY,	-- 제휴업체 고유번호					
+	member_no	 NUMBER 	NOT  NULL,		--사용자 고유번호											
+	client_name	 VARCHAR2(500) 	 NOT  NULL,	-- 제휴업체 이름			
+	client_tel	 VARCHAR2(500)	 NULL,		-- 제휴업체 전화번호			
+	client_address	 VARCHAR2(500)	 NOT  NULL,		--제휴업체 전화번호	 		
+	client_registration	 VARCHAR2(2)	 NOT  NULL,		-- 제휴업체로 등록 되었는지 아닌지		
+	client_max_client	 VARCHAR2(500)	 NULL,		--예약 가능인원			
+	client_reservation 	VARCHAR2(2)  NULL,      -- 제휴업체 예약가능여부
+	client_paycode NUMBER NOT NULL, -- 7그램 1111, 맥주창고 2222
+	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE
 );
-INSERT INTO client VALUES(client_seq.NEXTVAL,'22','7Grma','010-8888-9999','강남구 테헤란로11','Y','30','',1111);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'65','7Grma','010-7777-7777','강남구 테헤란로11','Y','30','',1111);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'67','맥주창고','010-8888-8888','강남구 테헤란로12','Y','50','',2222);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'68','요술포차','010-0000-0000','강남구 테헤란로13','Y','150','',3333);
 COMMIT;
 select * from client where client_no=#{dto.client_no};
-
+SELECT * FROM CLIENT;
 ------------------세훈오빠가 만든 메뉴 테이블---------------
 
 DROP TABLE menu;
@@ -107,7 +109,7 @@ SELECT * FROM menu;
 DROP TABLE coupon;
 DROP SEQUENCE coupon_seq;
 CREATE SEQUENCE coupon_seq;
-CREATE TABLE coupon (--
+CREATE TABLE coupon (
 	--해당 쿠폰의 기본정보
 	coupon_no	 NUMBER	 PRIMARY  KEY,					--쿠폰 고유번호					 
 	client_no	 NUMBER 	NOT  NULL,					--제휴업체 고유번호								
@@ -131,14 +133,14 @@ CREATE TABLE coupon (--
 	CONSTRAINT fk_coupon2 FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE,
 	CONSTRAINT fk_coupon3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE
 );
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,1,'7gram','아메리카노',2000,'../img/americano.png','좋은원두를 사용합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,2,'7gram','딸기스무디',3000,'../img/strawberrySmothy.png','딸기딸기 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,3,'7gram','레몬티',2000,'../img/remonTea.png','레몬레몬 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,4,'7gram','카페모카',3000,'../img/cafemoca.png','커피와 초코의 조합!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,5,'7gram','유자프라페',3000,'../img/ujaPrafa.png','유자먹고 감기조심하세요~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,6,'7gram','요거트스무디',3000,'../img/yogutSmothy.png','유기농 요거트로만든 요거트스무디!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,7,'7gram','자몽에이드',3000,'../img/jamongAide.png','자몽자몽해~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
-INSERT INTO coupon VALUES(coupon_seq.nextval,1,100,8,'7gram','망고스무디',3000,'../img/mangoSmothy.png','망고망고해~',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,1,'7gram','아메리카노',2000,'../img/americano.png','좋은원두를 사용합니다!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,2,'7gram','딸기스무디',3000,'../img/strawberrySmothy.png','딸기딸기 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,3,'7gram','레몬티',2000,'../img/remonTea.png','레몬레몬 상큼상큼 비타민 가득!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,4,'7gram','카페모카',3000,'../img/cafemoca.png','커피와 초코의 조합!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,5,'7gram','유자프라페',3000,'../img/ujaPrafa.png','유자먹고 감기조심하세요~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,6,'7gram','요거트스무디',3000,'../img/yogutSmothy.png','유기농 요거트로만든 요거트스무디!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,7,'7gram','자몽에이드',3000,'../img/jamongAide.png','자몽자몽해~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,8,'7gram','망고스무디',3000,'../img/mangoSmothy.png','망고망고해~',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
 COMMIT;
 
 
@@ -152,7 +154,92 @@ where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_n
 and rownum <= #{coupon_count}
 
 SELECT * FROM coupon;
+---------------------------------------------------------
+DROP TABLE coupon_history;
+DROP SEQUENCE coupon_history_seq;
+CREATE SEQUENCE coupon_history_seq;
+CREATE TABLE coupon_history(
+	coupon_history_no NUMBER PRIMARY KEY,
+	member_no NUMBER NOT NULL,
+	client_no NUMBER NOT NULL,
+	menu_no NUMBER NOT NULL,
+	member_name VARCHAR2(100) NOT NULL,
+	client_name VARCHAR2(100) NOT NULL,
+	menu_title VARCHAR2(100) NOT NULL,
+	menu_price NUMBER NOT NULL,
+	coupon_history_quantity NUMBER NOT NULL,
+	coupon_history_date DATE NOT NULL,
+	coupon_history_cost NUMBER NOT NULL,
+	coupon_history_info VARCHAR2(500) NOT NULL,
+	CONSTRAINT fk_coupon_history FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE,
+	CONSTRAINT fk_coupon_history2 FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE,
+	CONSTRAINT fk_coupon_history3 FOREIGN KEY(menu_no) REFERENCES menu(menu_no) ON DELETE CASCADE
+);
+--coupon_history 값 넣기 
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,61,1,1,'이민이','7gram','아메리카노', 2000, 1, SYSDATE, 2000, '판매');
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,61,1,3,'이민이','7gram','레몬티', 2000, 1, SYSDATE, 2000, '판매');
+
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,61,1,4,'이민이','7gram','카페모카',3000,1,'2018/12/30',3000,'판매');
+INSERT INTO coupon_history VALUES(coupon_history_seq.nextval,61,1,2,'이민이','7gram','딸기스무디',3000,1,SYSDATE,3000,'판매');
+COMMIT;
+
+SELECT * FROM coupon_history;
+
+
+
+--------------------------------------------------------
+
+CREATE TABLE member_reservation (      --—예약 테이블
+   reservation_no   NUMBER   NOT NULL,    --—예약 고유번호         
+   member_no   NUMBER NOT NULL,     --—멤버 고유번호            
+   client_no   NUMBER NOT NULL,     --—제휴업체 고유번호
+   member_phone   VARCHAR2(13) NOT NULL,      --—멤버 핸드폰번호
+   reservation_date_request   DATE   NOT NULL,   --—예약 생성 날짜예
+   reservation_date   VARCHAR2(50)   NOT NULL,   --—예약 신청 날짜        
+   reservation_people   NUMBER   NOT NULL,         --—-예약 인원         
+   reservation_time   NUMBER   NOT NULL,      --—예약 시간            
+   reservation_confirm   VARCHAR2(2)   NOT NULL,      --—예약 확인(Y,N)         
+   reservation_memo   VARCHAR2(50)   NULL,      --—예약 시 요청 사항         
+   reservation_reject   VARCHAR2(20)   NULL      --—예약 거부 사유         
+);
+
+
+SELECT * FROM member_reservation; 
+
+
+
+
 -----------------------------------------------
+/*
+ *  작성자 : 이민이
+ *  작성일 : 2019-01-15
+ *  제목 : 이용후기 게시판 테이블
+ *  (게시판번호,제목,내용,작성자,작성일,수정일,조회수)
+ */
+DROP TABLE board;
+DROP SEQUENCE board_seq;
+CREATE SEQUENCE board_seq;
+CREATE TABLE board (
+	board_no NUMBER PRIMARY KEY,
+	member_no NUMBER NOT NULL,
+	client_no NUMBER NOT NULL, -- 이거로 학생들이 보는 카테고리 나누기
+	board_category VARCHAR2(100) NOT NULL, -- 이용후기:review , 공지사항:notice, 건의사항:complain
+	board_title VARCHAR2(100) NOT NULL,
+	board_content VARCHAR2(1024) NOT NULL,
+	board_writer VARCHAR2(10) NOT NULL,
+	board_date_create DATE NOT NULL,
+	board_date_update DATE NULL,
+	board_count NUMBER NULL,
+	board_like NUMBER NULL,
+	CONSTRAINT fk_board FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE
+);
+INSERT INTO board VALUES(board_seq.NEXTVAL,61,1,'review','이용후기게시판 이용안내','이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
+INSERT INTO board VALUES(board_seq.NEXTVAL,10000,1,'notice','공지사항게시판 이용안내','공지사항게시판 내용부분 테스트중','kh',SYSDATE,'','0','0');
+COMMIT;
+SELECT * FROM board;
+SELECT * FROM board WHERE BOARD_CATEGORY='notice';
+DELETE FROM board WHERE BOARD_WRITER='이민이' AND BOARD_CATEGORY='notice';
+------------------------------------------------
 CREATE TABLE board (
 	board_no	NUMBER	NOT NULL,								
 	user_no	NUMBER	NOT NULL,									 					
@@ -230,3 +317,15 @@ CREATE TABLE student (
 	student_phone	VARCHAR2(11)	NOT NULL,					 
 	student_class	VARCHAR2(5)	NOT NULL						
 );
+
+
+
+
+SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
+		(select count(*) from coupon WHERE member_no = 10000 AND menu_no=3 AND coupon_state = 'Y') as coupon_count   
+		FROM coupon 
+		WHERE member_no=10000 AND menu_no=3 AND rownum = 1 
+		GROUP BY client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price;
+		
+		
+		

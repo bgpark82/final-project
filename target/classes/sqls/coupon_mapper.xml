@@ -5,7 +5,7 @@
 	<select id="coupon_list" resultType="CouponDto">
 		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, count(*) AS coupon_count
 		FROM coupon 
-		WHERE member_no = 100 AND coupon_state = 'Y' 
+		WHERE member_no = 10000 AND coupon_state = 'Y' 
 		GROUP BY client_no, client_name, menu_no, menu_title, menu_image, menu_price
 		ORDER BY client_no
 	</select>
@@ -13,9 +13,9 @@
 	<select id="coupon_detail" resultType="CouponDto" parameterType="Integer">
 	<![CDATA[ 
 		SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
-		(select count(*) from coupon WHERE member_no = 100 AND menu_no=#{menu_no} AND coupon_state = 'Y') as coupon_count   
+		(select count(*) from coupon WHERE member_no = 10000 AND menu_no=#{menu_no} AND coupon_state = 'Y') as coupon_count   
 		FROM coupon 
-		WHERE member_no=100 AND menu_no=#{menu_no} AND rownum = 1 
+		WHERE member_no=10000 AND menu_no=#{menu_no} AND rownum = 1 
 		GROUP BY client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price
 	]]>
 	</select>
@@ -25,10 +25,15 @@
 	<![CDATA[ 
 		UPDATE coupon 
 		SET member_no = #{member_no}
-		WHERE member_no = 100 AND client_no = #{client_no} AND menu_no = #{menu_no} AND 	
+		WHERE member_no = 10000 AND client_no = #{client_no} AND menu_no = #{menu_no} AND 	
 		rownum <= #{coupon_count}
 	]]>
 	</update>
+	
+	<insert id="coupon_history">
+		INSERT INTO coupon_history
+		VALUES(coupon_history_seq.NEXTVAL,#{user.member_no},#{client_no},#{menu_no},#{user.member_name},#{client_name},#{menu_title},#{menu_price},#{coupon_count},SYSDATE,#{coupon_history_cost},'판매')
+	</insert>
 	
 	<select id="my_coupon_list"  parameterType="Integer" resultType="CouponDto">
 		SELECT menu_no,client_name,menu_title,menu_price,count(*) AS coupon_count

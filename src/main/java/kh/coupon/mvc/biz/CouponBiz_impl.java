@@ -71,6 +71,11 @@ public class CouponBiz_impl implements CouponBiz {
 		}
 		return false;
 	}
+
+	@Override
+	public List<CouponDto> beer_list() {
+		return coupon_dao.beer_list();
+	}
 	
 	
 	
