@@ -81,7 +81,7 @@ public class ClientController {
 //	public String clientMain() {
 //		return "clientViews/clientMain";
 //	}
-//	
+//	바뀌어야할 코드임
 //	@RequestMapping("client_beerMain")
 //	public String clisnt_beerMain() {
 //		return "clientViews/client_beerMain";

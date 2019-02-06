@@ -85,17 +85,7 @@ INSERT INTO client VALUES(client_seq.NEXTVAL,'3','요술포차','010-8888-9999',
 COMMIT;
 select * from client where client_no=#{dto.client_no};
 SELECT * FROM client;
-------------------세훈오빠가 만든 메뉴 테이블---------------
-
-CREATE TABLE client (
-	client_no	NUMBER	NOT NULL,					--제휴업체 고유번호				
-	member_no	NUMBER	NOT NULL,					--제휴업체 사장님 고유번호								
-	client_name	VARCHAR2(500)	NOT NULL,			--제휴업체 명			
-	client_tel	VARCHAR2(500)	NULL,				--제휴업체	 번호		
-	client_address	VARCHAR2(500)	NOT NULL,		--제휴업체 주소			
-	client_registration	VARCHAR2(500)	NOT NULL,	--제휴업체 신청 현황			
-	client_max_client	VARCHAR2(500)	NULL,		--제휴업체 최대 예약 가능 인원 			
-	client_reservation	VARCHAR2(500)	NOT NULL	--제휴업체 예약 가능 여부
+----메뉴테이블
 DROP TABLE menu CASCADE CONSTRAINT;
 DROP SEQUENCE menu_seq;
 CREATE SEQUENCE menu_seq;
@@ -107,8 +97,8 @@ CREATE TABLE menu(
 	menu_price NUMBER NOT NULL,
 	menu_image VARCHAR2(500) NULL,
 	menu_detail VARCHAR2(500) NULL,
-	menu_create_date DATE NOT NULL,
-	CONSTRAINT fk_menu FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE
+	menu_create_date DATE NOT NULL
+	--CONSTRAINT fk_menu FOREIGN KEY(client_no) REFERENCES client(client_no) ON DELETE CASCADE
 );
 
 
@@ -123,7 +113,7 @@ INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','망고스무디','3000','.
 COMMIT;
 SELECT * FROM menu;
 
--------------------세훈오빠가 만든 coupon DB(민이가 제약조건 추가)--------------------------------
+-------------------coupon DB--------------------------------
 DROP TABLE coupon;
 DROP SEQUENCE coupon_seq;
 CREATE SEQUENCE coupon_seq;
