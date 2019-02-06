@@ -10,7 +10,6 @@
 <script type="text/javascript">
 	function getMenu_list(){
 		var client_no = $("#client_no").val();
-		alert(client_no);
 			$.ajax({
 				type:"post",
 				url:"../academy/menu_list",
@@ -33,7 +32,7 @@
 							"</tr>"
 						);
 	                });
-					$("tbody").append("<input type='button' value='구매' onclick=location.href='../academy/coupon_purchse_form?client_no="+client_no+"'>");
+					$("tbody").append("<input type='button' value='구매' onclick=location.href='../academy/coupon_purchase_form?client_no="+client_no+"'>");
 				}, error:function(request,status,error){
 					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}

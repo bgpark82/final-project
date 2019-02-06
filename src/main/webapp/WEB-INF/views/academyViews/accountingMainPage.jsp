@@ -27,7 +27,8 @@
 	<h1>운영팀</h1>
 	<a href="../academy/coupon_sale_page">쿠폰 판매</a> |
 	<a href="../academy/sales_history">판매 내역</a> |	
-	<a href="../academy/coupon_stock">재고 내역</a> 
+	<a href="../academy/coupon_stock">재고 내역</a> |
+	<a href="../academy/notice_list">공지 사항</a> |
 	<a href="../academy/purchase_statistics_page">업체별 쿠폰 구매 통계</a> |
 	<a href="../academy/sale_statistics_page">업체별 쿠폰 판매 통계</a><br/>
 	

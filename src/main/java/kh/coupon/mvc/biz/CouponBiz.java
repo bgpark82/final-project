@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import kh.coupon.mvc.dto.CouponDto;
 
-@Service
 public interface CouponBiz {
 	
 	public List<CouponDto> coupon_list();

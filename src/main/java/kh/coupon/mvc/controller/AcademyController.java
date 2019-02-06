@@ -10,8 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kh.coupon.mvc.biz.Academy_biz;
-import kh.coupon.mvc.dto.Menu;
+import kh.coupon.mvc.biz.AcademyBiz;
+import kh.coupon.mvc.biz.BoardBiz;
+import kh.coupon.mvc.dto.MenuDto;
 import net.sf.json.JSONObject;
 
 @Controller
@@ -19,7 +20,10 @@ import net.sf.json.JSONObject;
 public class AcademyController {
 
 	@Autowired
-	private Academy_biz academy_biz;
+	private AcademyBiz academy_biz;
+	
+	@Autowired
+	private BoardBiz board_biz;
 	
 	@RequestMapping("test")
 	public String test() {
@@ -104,7 +108,7 @@ public class AcademyController {
 	public Map<String, Object> menuList(int client_no) {
 		System.out.println(client_no);
 		
-		List<Menu> menu_list = academy_biz.menu_list(client_no);
+		List<MenuDto> menu_list = academy_biz.menu_list(client_no);
 		System.out.println("menu사이즈"+menu_list.size());
 		Map<String, Object> map = new HashMap<String, Object>();
 		
@@ -123,18 +127,9 @@ public class AcademyController {
 	public String coupon_purchase_form(Model model, int client_no) {
 		//menu 테이블에 munu 정보 가져오기 
 		model.addAttribute("menu_list",academy_biz.menu_list(client_no));
-		return "academyViews/couponPurchseForm";
+		return "academyViews/coupon_purchase_form";
 	}
 	
-	/*
-	작성자 : 장세훈
-	작성 날짜 : 19.01.22
-	기능 : 구매요청
-	사용하는 DB 테이블 : coupon, coupon_history
-	부가 설명 :	coupon 테이블에 신청한 수량만큼 쿠폰을 생성시키고(해당 쿠폰값을 수량만큼 반복문으로 map에 넣고, mapper에 전달 후 처리), coupon_state 값은 N이다.
-				client에서 확인(판매) 처리를 하면 coupon_state 값이 Y로 바뀌며,coupon_history 테이블에 정보를 입력한다. 
-				그 후  학원과, 사용자에게 보여질 수 있다.
-	*/
 	/*
 	작성자 : 장세훈
 	작성 날짜 : 19.01.26
@@ -144,8 +139,8 @@ public class AcademyController {
 				(구매 완료(판매 완료) 처리 전 상태)
 	*/
 	@RequestMapping("coupon_purchase_order")
-	public String coupon_purchase_order(Model model,int member_no, int client_no, int menu_no, String member_name, String client_name, int coupon_history_quantity, int coupon_history_cost) {
-		if(academy_biz.coupon_purchase_order(member_no, client_no, menu_no, member_name, client_name, coupon_history_quantity, coupon_history_cost)) {
+	public String coupon_purchase_order(Model model,int client_no, int member_no, int menu_no, String member_name, String client_name, int coupon_history_quantity, int coupon_history_cost) {
+		if(academy_biz.coupon_purchase_order(client_no, member_no, menu_no, member_name, client_name, coupon_history_quantity, coupon_history_cost)) {
 			return "redirect:coupon_purchase_order_list";
 		}
 		return "academyViews/menuPage";
@@ -217,6 +212,41 @@ public class AcademyController {
 	public String coupon_sale_page(Model model) {
 		model.addAttribute("coupon_stockList",academy_biz.coupon_stock());
 		return "academyViews/coupon_sale_page";
+	}
+	
+	/*
+	작성자 : 장세훈
+	작성 날짜 : 19.02.06
+	기능 : 공지사항 list
+	사용하는 DB 테이블 : board
+	부가 설명 :	board 테이블에서 board_category 값이 notice 인 게시글들을 보여준다.
+	*/
+	@RequestMapping("notice_list")
+	public String notice_list(Model model) {
+		model.addAttribute("notice_list",board_biz.notice_list());
+		return "academyViews/notice_list";
+	}
+	
+	@RequestMapping("board_detail")
+	public String board_detail(Model model, int board_no) {
+		System.out.println(board_no);
+		model.addAttribute("notice_dto",board_biz.board_detail(board_no));
+		return "academyViews/notice_detail";
+	}
+	
+	@RequestMapping("board_insertForm")
+	public String board_insertForm(Model model, String board_category) {
+		model.addAttribute("board_category",board_category);
+		return "academyViews/board_insertForm";
+	}
+	
+	@RequestMapping("board_insert")
+	public String board_insert(Model model, int member_no, String board_category, String board_writer, String board_title, String board_content) {
+		int res = board_biz.board_insert(member_no,board_category, board_writer, board_title, board_content);
+		if(res > 0) {
+			return "redirect:board_detail?board_no="+res;
+		}
+		return "academyViews/notice_list";
 	}
 	
 	

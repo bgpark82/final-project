@@ -8,10 +8,9 @@ public class ClientDto {
    private String client_tel;
    private String client_address;
    private String client_registration;
-   private String client_max_client;
+   private int client_max_client;
    private String client_reservation;
    private int client_paycode;
-   
    
    public ClientDto() {
       
@@ -19,7 +18,7 @@ public class ClientDto {
 
 
    public ClientDto(int client_no, int member_no, String client_name, String client_tel, String client_address,
-         String client_registration, String client_max_client, String client_reservation, int client_paycode) {
+         String client_registration, int client_max_client, String client_reservation, int client_paycode) {
       super();
       this.client_no = client_no;
       this.member_no = member_no;
@@ -93,12 +92,12 @@ public class ClientDto {
    }
 
 
-   public String getClient_max_client() {
+   public int getClient_max_client() {
       return client_max_client;
    }
 
 
-   public void setClient_max_client(String client_max_client) {
+   public void setClient_max_client(int client_max_client) {
       this.client_max_client = client_max_client;
    }
 

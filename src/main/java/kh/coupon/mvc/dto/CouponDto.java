@@ -28,8 +28,41 @@ public class CouponDto {
 	public CouponDto(int coupon_no, int client_no, int member_no, int menu_no, String client_name, String menu_title,
 			int menu_price, String menu_image, String menu_detail, Date coupon_date_create, String coupon_used,
 			Date cooupon_buy_date, String coupon_used_send, Date coupon_send_date, String coupon_from, String coupon_state,int coupon_count,int total_amount) {
-		super();
 		this.coupon_no = coupon_no;
+		this.client_no = client_no;
+		this.member_no = member_no;
+		this.menu_no = menu_no;
+		this.client_name = client_name;
+		this.menu_title = menu_title;
+		this.menu_price = menu_price;
+		this.menu_image = menu_image;
+		this.menu_detail = menu_detail;
+		this.coupon_date_create = coupon_date_create;
+		this.coupon_used = coupon_used;
+		this.cooupon_buy_date = cooupon_buy_date;
+		this.coupon_used_send = coupon_used_send;
+		this.coupon_send_date = coupon_send_date;
+		this.coupon_from = coupon_from;
+		this.coupon_state = coupon_state;
+		this.coupon_count = coupon_count;
+		this.total_amount = total_amount;
+	}
+	
+	public CouponDto(int client_no, int member_no, int menu_no, String client_name, String menu_title,
+			int menu_price, String menu_image, String menu_detail) {
+		this.client_no = client_no;
+		this.member_no = member_no;
+		this.menu_no = menu_no;
+		this.client_name = client_name;
+		this.menu_title = menu_title;
+		this.menu_price = menu_price;
+		this.menu_image = menu_image;
+		this.menu_detail = menu_detail;
+	}
+	
+	public CouponDto( int client_no, int member_no, int menu_no, String client_name, String menu_title,
+			int menu_price, String menu_image, String menu_detail, Date coupon_date_create, String coupon_used,
+			Date cooupon_buy_date, String coupon_used_send, Date coupon_send_date, String coupon_from, String coupon_state,int coupon_count,int total_amount) {
 		this.client_no = client_no;
 		this.member_no = member_no;
 		this.menu_no = menu_no;

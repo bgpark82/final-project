@@ -60,6 +60,8 @@ INSERT INTO member VALUES(3,'박운영','test33','test33',NULL,'3',SYSDATE,NULL,
 UPDATE MEMBER SET member_no = 100 WHERE MEMBER_NO=1;
 UPDATE member SET member_role = 'ROLE_ACCOUNT' WHERE member_id = '11';
 SELECT * FROM MEMBER;
+
+
 -------------------------------------------------------
 DROP TABLE client CASCADE CONSTRAINT;
 DROP SEQUENCE client_seq;
@@ -313,15 +315,20 @@ WHERE member_no = 1 AND coupon_history_info = '판매' AND EXTRACT(year FROM cou
 
 
 -----------------------------------------------
+DROP SEQUENCE board_seq;
+DROP TABLE board;
+CREATE SEQUENCE board_seq;
 CREATE TABLE board (
 	board_no	NUMBER	NOT NULL,								
-	user_no	NUMBER	NOT NULL,									 					
+	member_no	NUMBER	NOT NULL,	
+	board_category	VARCHAR2(500)	NOT NULL,
 	board_title	VARCHAR2(500)	NOT NULL,						
-	board_content	VARCHAR2(3000)	NOT NULL,					
+	board_content	VARCHAR2(3000)	NOT NULL,	
+	board_writer	VARCHAR2(10) NOT NULL,
 	board_date_create	DATE	NOT NULL,						
 	board_date_update	DATE	NULL,							
-	board_category	VARCHAR2(500)	NOT NULL,					
-	board_count	NUMBER	NULL									
+	board_count	NUMBER	NOT NULL,
+	board_like_count NUMBER NOT NULL
 );
 
 CREATE TABLE client_request (
@@ -362,31 +369,31 @@ CREATE TABLE board_reply (
 
 
 CREATE TABLE user_reservation (
-	reservation_no	NUMBER	NOT NULL,							
-	user_no	NUMBER	NOT NULL,									
-	client_no	NUMBER	NOT NULL,								
+	reservation_no	NUMBER				NOT NULL,							
+	user_no	NUMBER						NOT NULL,									
+	client_no	NUMBER					NOT NULL,								
 	reservation_date_request	DATE	NOT NULL,				
 	reservation_date	VARCHAR2(50)	NOT NULL,				
-	reservation_people	NUMBER	NOT NULL,						
-	reservation_time	NUMBER	NOT NULL,							
-	reservation_confirm	VARCHAR2(2)	NOT NULL,					
+	reservation_people	NUMBER			NOT NULL,						
+	reservation_time	NUMBER			NOT NULL,							
+	reservation_confirm	VARCHAR2(2)		NOT NULL,					
 	reservation_memo	VARCHAR2(50)	NULL,					
 	reservation_reject	VARCAHR2(20)	NULL					
 );
 
 CREATE TABLE payment (
-	payment_no	NUMBER	NOT NULL,								
-	user_no	NUMBER	NOT NULL,										
-	coupon_no	NUMBER	NOT NULL,								
+	payment_no	NUMBER		NOT NULL,								
+	user_no	NUMBER			NOT NULL,										
+	coupon_no	NUMBER		NOT NULL,								
 	payment_cost	NUMBER	NOT NULL							
 );
 
 CREATE TABLE student (
-	student_no	NUMBER	NOT NULL,								
+	student_no	NUMBER				NOT NULL,								
 	student_name	VARCHAR2(10)	NOT NULL,					
 	student_birth	VARCHAR2(10)	NOT NULL,					
-	student_gender	VARCHAR2(2)	NOT NULL,						
+	student_gender	VARCHAR2(2)		NOT NULL,						
 	student_email	VARCHAR2(30)	NOT NULL,					
 	student_phone	VARCHAR2(11)	NOT NULL,					 
-	student_class	VARCHAR2(5)	NOT NULL						
+	student_class	VARCHAR2(5)		NOT NULL						
 );
