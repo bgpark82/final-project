@@ -72,19 +72,17 @@ CREATE TABLE client (
 	client_name	 VARCHAR2(500) 	 NOT  NULL,				
 	client_tel	 VARCHAR2(500)	 NULL,					
 	client_address	 VARCHAR2(500)	 NOT  NULL,					
-	client_registration	 VARCHAR2(500)	 NOT  NULL,				
+	client_registration	 VARCHAR2(500)	  NULL,				
 	client_max_client	 VARCHAR2(500)	 NULL,					
 	client_reservation 	VARCHAR2(500)  NULL,
-	client_paycode NUMBER NOT NULL, -- 7그램 1111, 맥주창고 2222 요술포차 3333
+	client_paycode NUMBER NULL, -- 7그램 1111, 맥주창고 2222 요술포차 3333
 	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no)
 );
-INSERT INTO client VALUES(client_seq.NEXTVAL,'100','7gram','010-8888-9999','강남구 테헤란로11','Y','30','',1111);
-INSERT INTO client VALUES(client_seq.NEXTVAL,'2','맥주창고','010-8888-9999','강남구 테헤란로11','Y','30','',2222);
 
-INSERT INTO client VALUES(client_seq.NEXTVAL,'3','요술포차','010-8888-9999','강남구 테헤란로11','Y','30','',3333);
-COMMIT;
-select * from client where client_no=#{dto.client_no};
+INSERT 
+
 SELECT * FROM client;
+
 ----메뉴테이블
 DROP TABLE menu CASCADE CONSTRAINT;
 DROP SEQUENCE menu_seq;
@@ -92,7 +90,7 @@ CREATE SEQUENCE menu_seq;
 CREATE TABLE menu(
 	menu_no NUMBER PRIMARY KEY,
 	client_no NUMBER NOT NULL, --7gram은 고유번호를 1로해놓자 일단
-	client_name VARCHAR2(500) NOT NULL,
+	client_name VARCHAR2(500) NULL,
 	menu_title VARCHAR2(500) NOT NULL,
 	menu_price NUMBER NOT NULL,
 	menu_image VARCHAR2(500) NULL,
@@ -102,16 +100,47 @@ CREATE TABLE menu(
 );
 
 
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
-INSERT INTO menu VALUES(menu_seq.NEXTVAL,'3','7gram','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','아메리카노','2000','../img/americano.png','좋은원두를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','딸기스무디','3000','../img/strawberrySmothy.png','국산 딸기를 사용합니다!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','레몬티','2000','../img/remonTea.png','레몬레몬 상큼상큼~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','카페모카','3000','../img/cafemoca.png','커피와 초코의 만남!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','유자프라페','3000','../img/ujaPrafa.png','유자먹고 감기조심하세요~',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,1,'7gram','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
 COMMIT;
 SELECT * FROM menu;
+
+
+
+
+
+DROP TABLE board;
+DROP SEQUENCE board_seq;
+CREATE SEQUENCE board_seq;
+CREATE TABLE board (
+   board_no NUMBER PRIMARY KEY,
+   member_no NUMBER NOT NULL,
+   board_category VARCHAR2(100) NOT NULL, -- 7그램,맥주창고,요술포차...,공지사항,건의사항
+   board_title VARCHAR2(100) NOT NULL,
+   board_content VARCHAR2(1024) NOT NULL,
+   board_writer VARCHAR2(10) NOT NULL,
+   board_date_create DATE NOT NULL,
+   board_date_update DATE NULL,
+   board_count NUMBER NOT NULL,
+   board_like_count NUMBER NULL,
+   CONSTRAINT fk_board FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE
+);
+INSERT INTO board VALUES(board_seq.NEXTVAL,13,'7Gram','7Gram이용후기게시판 이용안내','이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
+INSERT INTO board VALUES(board_seq.NEXTVAL,13,'맥주창고','맥주창고 이용후기게시판 이용안내','맥주창고 이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
+COMMIT;
+SELECT * FROM board;
+
+
+
+
+
+
 
 -------------------coupon DB--------------------------------
 DROP TABLE coupon;
@@ -159,7 +188,7 @@ CREATE TABLE coupon_history(
 	menu_title VARCHAR2(100) NOT NULL,			--해당 제휴업체의 메뉴타이틀
 	menu_price NUMBER NOT NULL,					--해당 메뉴 가격
 	--coupon_history 테이블의 기본 정보
-	coupon_history_quantity NUMBER NOT NULL,	--거래(판매,구매) 수량
+	coupon_history_quantity NUMBER NOT NULL,		--거래(판매,구매) 수량
 	coupon_history_date DATE NOT NULL,			--거래(판매,구매) 내역 날짜
 	coupon_history_cost NUMBER NOT NULL,		--거래(판매,구매) 비용
 	coupon_history_info VARCHAR2(100) NOT NULL	--거래 정보(판매 & 구매 판단 컬럼)
@@ -184,7 +213,7 @@ CREATE TABLE menu(
 	member_no	 NUMBER 	NOT  NULL,					--구매한 멤버의 고유번호
 	menu_no NUMBER NOT NULL,
 	--해당 쿠폰의 정보
-	client_name	 VARCHAR2(500) 	NOT   NULL,	--제휴업체명
+	client_name	 VARCHAR2(500) 	NOT   NULL,		--제휴업체명
 	menu_title	 VARCHAR2(500)	 NOT   NULL,		--쿠폰 이름(메뉴명)	
 	menu_price	 NUMBER	 NOT  NULL,				--쿠폰 가격 		
 	menu_image	 VARCHAR2(500)  	NULL,			--쿠폰 이미지 				
