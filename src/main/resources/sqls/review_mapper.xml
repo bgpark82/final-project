@@ -2,49 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="review">
 
-	<select id="review_list" resultType="ReviewDto">
-		SELECT board_no,client_no,board_category,board_title,board_writer,board_date_create,board_count,board_like 
+	<select id="review_list" parameterType="String" resultType="ReviewDto">
+		SELECT board_no,board_category,board_title,board_writer,board_date_create,board_count,board_like_count 
 		FROM board 
-		WHERE board_category='review'
-		ORDER BY board_no DESC
-	</select>
-	
-	<select id="board_list" resultType="ReviewDto">
-		SELECT board_no,client_no,board_category,board_title,board_writer,board_date_create,board_count,board_like 
-		FROM board 
-		WHERE board_category='notice'
-		ORDER BY board_no DESC
-	</select>
-	
-	<select id="review_list_seven" resultType="ReviewDto">
-		SELECT board_no,client_no,board_category,board_title,board_writer,board_date_create,board_count,board_like 
-		FROM board 
-		WHERE board_category='review' AND client_no=1 
-		ORDER BY board_no DESC
-	</select>
-	
-	<select id="review_list_bear" resultType="ReviewDto">
-		SELECT board_no,client_no,board_category,board_title,board_writer,board_date_create,board_count,board_like 
-		FROM board 
-		WHERE board_category='review' AND client_no=2
-		ORDER BY board_no DESC
-	</select>
-	
-	<select id="review_list_magic" resultType="ReviewDto">
-		SELECT board_no,client_no,board_category,board_title,board_writer,board_date_create,board_count,board_like 
-		FROM board 
-		WHERE board_category='review' AND client_no=3 
+		WHERE board_category=#{board_category}
 		ORDER BY board_no DESC
 	</select>
 	
 	<select id="review_detail" resultType="ReviewDto" parameterType="int">
-		SELECT board_no,board_writer,client_no,board_title,board_content 
+		SELECT board_no,board_category,board_writer,board_title,board_content 
 		FROM board 
 		WHERE board_no=#{board_no}
 	</select>
 	
 	<insert id="review_insert" parameterType="ReviewDto">
-		INSERT INTO board VALUES(board_seq.NEXTVAL,#{member_no},#{client_no},'review',#{board_title},#{board_content},#{board_writer},SYSDATE,SYSDATE,0,0)
+		INSERT INTO board VALUES(board_seq.NEXTVAL,#{member_no},#{board_category},#{board_title},#{board_content},#{board_writer},SYSDATE,SYSDATE,0,0)
 	</insert>
 	
 	<update id="review_update" parameterType="ReviewDto">

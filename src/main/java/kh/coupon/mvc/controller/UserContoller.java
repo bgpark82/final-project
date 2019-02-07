@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kh.coupon.mvc.biz.ClientBiz;
 import kh.coupon.mvc.biz.CouponBiz;
 import kh.coupon.mvc.biz.ExpenseStatementBiz;
 import kh.coupon.mvc.biz.MemberBiz;
@@ -26,11 +27,11 @@ public class UserContoller {
 	@Autowired
 	private CouponBiz coupon_biz;
 	@Autowired
-	private MemberBiz member_biz;
-	@Autowired
 	private ReviewBiz review_biz;
 	@Autowired
 	private ExpenseStatementBiz expenseBiz;
+	@Autowired
+	private ClientBiz client_biz;
 	
 	@RequestMapping("coupone")
 	public String coupone() {
@@ -38,29 +39,30 @@ public class UserContoller {
 	}
 	
 	@RequestMapping("client_list")
-	public String client_list() {
+	public String client_list(Model model) {
+		//client_list 를 가져온다.
+		model.addAttribute("client_list",client_biz.client_list());
+		//모델에 담는다
 		return "userViews/clientList";
 	}
 	
+	//제휴업체 쿠폰 리스트
 	@RequestMapping("coupon_list")
-	public String coupon_list(Model model) {
-		model.addAttribute("list",coupon_biz.coupon_list());
+	public String coupon_list(Model model, int client_no) {
+		model.addAttribute("client_dto",client_biz.client_detail(client_no));
+		model.addAttribute("list",coupon_biz.coupon_list(client_no));
 		return "userViews/coupon_list";
 	}
 	
-	@RequestMapping("beer_list")
-	public String beer_list(Model model) {
-		model.addAttribute("list",coupon_biz.beer_list());
-		return "userViews/beerList";
-	}
-	
+	//쿠폰 상세보기
 	@RequestMapping("coupon_detail")
-	public String coupon_detail(Model model,int menu_no) {
+	public String coupon_detail(Model model,int menu_no,int client_no) {
 		model.addAttribute("coupon",coupon_biz.coupon_detail(menu_no));
-		model.addAttribute("list",coupon_biz.coupon_list());
+		model.addAttribute("list",coupon_biz.coupon_list(client_no));
 		return "userViews/couponDetail";
 	}
 	
+	//학생이 학원이 올려놓은 쿠폰 구매할때
 	@RequestMapping("coupon_buy")
 	public String coupon_buy(Model model,int member_no, int client_no, int menu_no,int coupon_count, RedirectAttributes redirectAttributes) {
 		int res = coupon_biz.coupon_buy(member_no,client_no,menu_no,coupon_count);
@@ -71,6 +73,7 @@ public class UserContoller {
 		return "userViews/myCoupon";
 	}
 	
+	//내쿠폰함에 보이는 리스트
 	@RequestMapping("my_coupon_list")
 	public String my_coupon_list(Model model,int member_no) {
 		model.addAttribute("my_coupon", coupon_biz.my_coupon_list(member_no));
@@ -102,11 +105,12 @@ public class UserContoller {
 		return "redirect:my_coupon_list?member_no="+member_no;
 	}
 	
+	// 쿠폰 선물하기
 	@RequestMapping("coupon_gift")
-	public String coupon_gift(Model model,String member_phone,int member_from_no,int member_no,int client_no,int menu_no,int coupon_count,HttpServletResponse response) throws IOException {
-		System.out.println("-----------"+member_phone+" "+member_from_no+" "+member_no+" "+client_no+" "+menu_no+" "+coupon_count);
-		if(coupon_biz.coupon_gift(member_phone,member_from_no,member_no,client_no, menu_no,coupon_count)) {
-			return "redirect:coupon_detail?menu_no="+menu_no;
+	public String coupon_gift(Model model,String member_phone,int member_from_no,int member_no,int menu_no,int coupon_count,int client_no,HttpServletResponse response) throws IOException {
+		System.out.println("-----------"+member_phone+" "+member_from_no+" "+member_no+" "+menu_no+" "+coupon_count);
+		if(coupon_biz.coupon_gift(member_phone,member_from_no,member_no,menu_no,coupon_count)) {
+			return "redirect:coupon_detail?menu_no="+menu_no+"&client_no="+client_no;
 		}
 		response.setContentType("text/html; charset=UTF-8");	 
 		PrintWriter out = response.getWriter();
@@ -142,36 +146,15 @@ public class UserContoller {
 	
 	
 //---------------------------------이용후기&공지사항 게시판--------------------------------------------------------------------
-		
+	//이용후기 게시판 리스트	
 	@RequestMapping("review_board_list")
-	public String review_board_list(Model model) {
-		model.addAttribute("list",review_biz.review_list());
+	public String review_board_list(Model model,String board_category) {
+		System.out.println(board_category);
+		model.addAttribute("list",review_biz.review_list(board_category));
 		return "userViews/reviewBoardList";
 	} 
 	
-	@RequestMapping("board_list")
-	public String board_list(Model model) {
-		model.addAttribute("list",review_biz.board_list());
-		return "userViews/boardList";
-	} 
-	
-	// 후기게시판에서 제휴업체 구분 검색
-	@RequestMapping("review_search")
-	public String review_search(Model model,int client_no,HttpServletRequest req) {
-		System.out.println("제휴업체구분 : " +client_no);
-		if(client_no == 1) {
-			model.addAttribute("list", review_biz.review_list_seven());			
-		} else if(client_no == 2) {
-			model.addAttribute("list", review_biz.review_list_bear());
-		} else if(client_no == 3) {
-			model.addAttribute("list", review_biz.review_list_magic());
-		} else if(client_no == 0){
-			model.addAttribute("list", review_biz.review_list());
-		}
-		req.setAttribute("client_no", client_no);
-		return "userViews/reviewBoardList";
-	}
-	
+	// 이용후기 상세보기
 	@RequestMapping("review_detail")
 	public String review_detail(Model model,int board_no) {
 		review_biz.updateHit(board_no);
@@ -179,30 +162,26 @@ public class UserContoller {
 		return "userViews/reviewBoardDetail";
 	}
 	
-	@RequestMapping("board_detail")
-	public String board_detail(Model model,int board_no) {
-		review_biz.updateHit(board_no);
-		model.addAttribute("dto",review_biz.review_detail(board_no));
-		return "userViews/boardDetail";
-	}
-	
+	// 이용후기에서 글작성폼
 	@RequestMapping(value="review_insertform")
-	public String review_insertform(Model model, int client_no) {
-		model.addAttribute("client_no",client_no);
+	public String review_insertform(Model model, String board_category) {
+		model.addAttribute("board_category",board_category);
 		return "userViews/reviewBoardInsert";
 	}
 	
+	// 이용후기 글작성 폼에서 글작성하면 여기로연결
 	@RequestMapping(value="review_insert", method=RequestMethod.POST)
 	public String review_insert(Model model,ReviewDto review_dto,HttpServletRequest request) {
 		int res = review_biz.review_insert(review_dto);
 		if(res>0) {
-			model.addAttribute("list",review_biz.review_list());
+			model.addAttribute("list",review_biz.review_list(review_dto.getBoard_category()));
 			return "userViews/reviewBoardList";
 		} else {
 			return "userViews/reviewBoardInsert";
 		}
 	}
 	
+	// 이용후기 글수정폼
 	@RequestMapping("review_updateform")
 	public String review_updateform(Model model,int board_no) {
 		model.addAttribute("dto",review_biz.review_detail(board_no));
@@ -210,6 +189,7 @@ public class UserContoller {
 		return "userViews/reviewBoardUpdate";
 	}
 	
+	// 이용후기 글수정폼에서 수정완료누르면 여기로 넘어옴
 	@RequestMapping(value="review_update", method=RequestMethod.POST)
 	public String review_update(Model model,ReviewDto review_dto,int board_no) {
 		int res = review_biz.review_update(review_dto);
@@ -221,10 +201,11 @@ public class UserContoller {
 		}
 	}
 	
+	// 이용후기 삭제
 	@RequestMapping("review_delete")
-	public String review_delete(Model model,int board_no) {
+	public String review_delete(Model model,int board_no,String board_category) {
 		review_biz.review_delete(board_no);
-		model.addAttribute("list",review_biz.review_list());
+		model.addAttribute("list",review_biz.review_list(board_category));
 		return "userViews/reviewBoardList";
 	}
 	

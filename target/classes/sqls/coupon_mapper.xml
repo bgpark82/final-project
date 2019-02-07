@@ -2,15 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="coupon">
 
-	<select id="coupon_list" resultType="CouponDto">
+	<!-- 쿠폰리스트 -->
+	<select id="coupon_list" parameterType="int" resultType="CouponDto">
 		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, count(*) AS coupon_count
 		FROM coupon 
-		WHERE member_no = 10000 AND coupon_state = 'Y' 
+		WHERE member_no = 10000 AND coupon_state = 'Y' AND client_no=#{client_no}
 		GROUP BY client_no, client_name, menu_no, menu_title, menu_image, menu_price
 		ORDER BY client_no
 	</select>
 	
-	<select id="coupon_detail" resultType="CouponDto" parameterType="Integer">
+	<!-- 쿠폰 리스트에서 하나누르면 나오는 쿠폰상세보기 -->
+	<select id="coupon_detail" resultType="CouponDto" parameterType="int">
 	<![CDATA[ 
 		SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
 		(select count(*) from coupon WHERE member_no = 10000 AND menu_no=#{menu_no} AND coupon_state = 'Y') as coupon_count   
@@ -20,7 +22,7 @@
 	]]>
 	</select>
 	
-	
+	<!-- 학생이 학원측이 올려놓은 쿠폰 구매할때 쿠폰의 member_no가 학원인것을 구매하는갯수만큼 학생의 member_no로 바꿔줌 -->
 	<update id="coupon_buy" parameterType="map">
 	<![CDATA[ 
 		UPDATE coupon 
@@ -30,11 +32,13 @@
 	]]>
 	</update>
 	
+	<!-- 학생이 쿠폰을 구매하면 담기는 구매내역(coupon_history) -->
 	<insert id="coupon_history">
 		INSERT INTO coupon_history
 		VALUES(coupon_history_seq.NEXTVAL,#{user.member_no},#{client_no},#{menu_no},#{user.member_name},#{client_name},#{menu_title},#{menu_price},#{coupon_count},SYSDATE,#{coupon_history_cost},'판매')
 	</insert>
 	
+	<!-- 학생이 쿠폰을 구매하거나 선물받은 내역이 내 쿠폰함에 담김 -->
 	<select id="my_coupon_list"  parameterType="Integer" resultType="CouponDto">
 		SELECT menu_no,client_name,menu_title,menu_price,count(*) AS coupon_count
 		FROM coupon 
@@ -42,6 +46,7 @@
 		GROUP BY menu_no,client_name,menu_title,menu_price
 	</select>
 	
+	<!-- 내 쿠폰함에서 쿠폰하나 누르면 몇개 사용할건지 나오는 디테일 -->
 	<select id="my_coupon_detail" resultType="CouponDto" parameterType="map">
 	<![CDATA[ 
 		SELECT client_no, client_name, menu_no, menu_title, menu_image, menu_price, 
@@ -52,10 +57,12 @@
 	]]>
 	</select>
 	
+	<!-- 구매한 쿠폰을 사용할때 직원이 입력하는 제휴업체 결제코드 맞는지 확인-->
 	<select id="check_paycode" parameterType="map" resultType="ClientDto">
 		select * from client where client_no=#{client_no}
 	</select>
 	
+	<!-- 결제코드가 맞다면 쿠폰사용처리 하기위해서 coupon_used를 Y로 바꿔주는 쿼리 -->
 	<update id="my_coupon_use" parameterType="map">
 	<![CDATA[ 
 		update coupon set coupon_used='Y' 
@@ -64,16 +71,17 @@
 	]]>
 	</update>
 	
-	
+	<!-- 쿠폰 선물할때 받는사람번호가 디비에 있는 수강생번호가 맞는지 확인 -->
 	<select id="check_phone" parameterType="String" resultType="int">
 		select member_no from member 
 		where member_phone=#{member_phone}
 	</select>
 	
+	<!-- 받는사람번호가 맞다면 쿠폰선물이 되어 선물여부를 Y로 바꾸고 쿠폰주인인 member_no를 받느사람 member_no로 바꿔줌  -->
 	<update id="coupon_gift" parameterType="map">
 	<![CDATA[ 
 		update coupon set member_no=#{member_to_no},coupon_used_send='Y',coupon_send_date=SYSDATE,coupon_from=#{member_from_no}
-		where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
+		where member_no = #{member_no} and menu_no = #{menu_no}
 		and coupon_used='N' and rownum <= #{coupon_count}
 	]]>
 	</update>

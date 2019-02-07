@@ -9,11 +9,7 @@ import kh.coupon.mvc.dto.ReviewDto;
 @Service
 public interface ReviewBiz {
 
-	public List<ReviewDto> review_list();
-	public List<ReviewDto> board_list();
-	public List<ReviewDto> review_list_seven(); // 7그램
-	public List<ReviewDto> review_list_bear(); // 맥주창고
-	public List<ReviewDto> review_list_magic(); // 요술포차
+	public List<ReviewDto> review_list(String board_category);
 	public ReviewDto review_detail(int board_no);
 	public int review_insert(ReviewDto review_dto);
 	public int review_update(ReviewDto review_dto);

@@ -7,28 +7,6 @@
 <html>
 <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript">
-$(function(){
-	var input = $("input").eq(3)
-	switch (input.attr("id")) {
-	  case "0":
-		  input.val("전체")
-	    break;
-	  case "1":
-		  input.val("7Gram")
-	    break;
-	  case "2":
-		  input.val("맥주창고")
-	    break;
-	  case "3":
-		  input.val("요술포차")
-	    break;
-	}
-})
-
-
-
-</script>
 <meta charset="UTF-8">
 <title>후기 작성 페이지</title>
 </head>
@@ -36,7 +14,6 @@ $(function(){
 	${user.member_name }님 환영합니다.
 	<h1>후기 작성 페이지</h1>
 	<form:form action="review_insert" method="post">
-	<input type="hidden" name="client_no" value="${client_no }">
 	<input type="hidden" name="member_no" value="${user.member_no }">
 	<table border="1">
 		<tr>
@@ -46,7 +23,7 @@ $(function(){
 		<tr>
 			<th>제휴업체</th>
 			<td>
-				<input type="text" id="${client_no }" readonly="readonly"/>
+				<input type="text" value="${board_category }" name="board_category" readonly="readonly"/>
 			</td>
 		</tr>
 		<tr>
@@ -59,7 +36,7 @@ $(function(){
 		</tr>
 	</table>
 	<hr>
-	<input type="button" value="취소" onclick="location.href='review_board_list'"/>
+	<input type="button" value="취소" onclick="location.href='review_board_list?board_category=${board_category}'"/>
 	<input type="submit" value="후기등록"/>
 	</form:form>
 </body>

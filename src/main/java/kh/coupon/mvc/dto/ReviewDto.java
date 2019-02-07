@@ -6,7 +6,6 @@ public class ReviewDto {
 
 	private int board_no;
 	private int member_no;
-	private int client_no;
 	private String board_category;
 	private String board_title;
 	private String board_content;
@@ -14,17 +13,16 @@ public class ReviewDto {
 	private Date board_date_create;
 	private Date board_date_update;
 	private int board_count;
-	private int board_like;
+	private int board_like_count;
 	
 	public ReviewDto() {}
 
-	public ReviewDto(int board_no, int member_no, int client_no, String board_category, String board_title,
+	public ReviewDto(int board_no, int member_no, String board_category, String board_title,
 			String board_content, String board_writer, Date board_date_create, Date board_date_update, int board_count,
-			int board_like) {
+			int board_like_count) {
 		super();
 		this.board_no = board_no;
 		this.member_no = member_no;
-		this.client_no = client_no;
 		this.board_category = board_category;
 		this.board_title = board_title;
 		this.board_content = board_content;
@@ -32,7 +30,7 @@ public class ReviewDto {
 		this.board_date_create = board_date_create;
 		this.board_date_update = board_date_update;
 		this.board_count = board_count;
-		this.board_like = board_like;
+		this.board_like_count = board_like_count;
 	}
 
 	public int getBoard_no() {
@@ -49,14 +47,6 @@ public class ReviewDto {
 
 	public void setMember_no(int member_no) {
 		this.member_no = member_no;
-	}
-
-	public int getClient_no() {
-		return client_no;
-	}
-
-	public void setClient_no(int client_no) {
-		this.client_no = client_no;
 	}
 
 	public String getBoard_category() {
@@ -115,12 +105,12 @@ public class ReviewDto {
 		this.board_count = board_count;
 	}
 
-	public int getBoard_like() {
-		return board_like;
+	public int getBoard_like_count() {
+		return board_like_count;
 	}
 
-	public void setBoard_like(int board_like) {
-		this.board_like = board_like;
+	public void setBoard_like_count(int board_like_count) {
+		this.board_like_count = board_like_count;
 	}
 
 	

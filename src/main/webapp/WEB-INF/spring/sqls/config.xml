@@ -7,7 +7,7 @@
 		<typeAlias alias="CouponDto" type="kh.coupon.mvc.dto.CouponDto"/>
 		<typeAlias alias="ClientDto" type="kh.coupon.mvc.dto.ClientDto"/>
 		<typeAlias alias="ReviewDto" type="kh.coupon.mvc.dto.ReviewDto"/>
-		<typeAlias alias="CouponHistoryDto" type="kh.coupon.mvc.dto.CouponHistoryDto"/>
+		<typeAlias alias="Coupon_historyDto" type="kh.coupon.mvc.dto.Coupon_historyDto"/>
 	</typeAliases>
 		
 	<mappers>

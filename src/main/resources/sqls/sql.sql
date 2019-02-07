@@ -57,6 +57,8 @@ CREATE TABLE member( --학원의 member_no는 임의로 10000이라하자
 );
 
 SELECT * FROM MEMBER;
+UPDATE MEMBER SET member_role='ROLE_CLIENT' WHERE member_no=68;
+DELETE FROM MEMBER WHERE member_no=72;
 -------------------------------------------------------
 DROP TABLE client;
 DROP SEQUENCE client_seq;
@@ -73,7 +75,7 @@ CREATE TABLE client (
 	client_paycode NUMBER NOT NULL, -- 7그램 1111, 맥주창고 2222
 	CONSTRAINT fk_client FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE
 );
-INSERT INTO client VALUES(client_seq.NEXTVAL,'65','7Grma','010-7777-7777','강남구 테헤란로11','Y','30','',1111);
+INSERT INTO client VALUES(client_seq.NEXTVAL,'65','7Gram','010-7777-7777','강남구 테헤란로11','Y','30','',1111);
 INSERT INTO client VALUES(client_seq.NEXTVAL,'67','맥주창고','010-8888-8888','강남구 테헤란로12','Y','50','',2222);
 INSERT INTO client VALUES(client_seq.NEXTVAL,'68','요술포차','010-0000-0000','강남구 테헤란로13','Y','150','',3333);
 COMMIT;
@@ -102,8 +104,11 @@ INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','유자프라페','3000','../img/uj
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','요거트스무디','3000','../img/yogutSmothy.png','몸에좋은 요거트!',SYSDATE);
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','자몽에이드','3000','../img/jamongAide.png','자몽먹으면 다이어트!',SYSDATE);
 INSERT INTO menu VALUES(menu_seq.NEXTVAL,'1','망고스무디','3000','../img/mangoSmothy.png','망고망고해~',SYSDATE);
+
+INSERT INTO menu VALUES(menu_seq.NEXTVAL,'2','점심쿠폰','4500','../img/coupon.png','KH학생들만을위한 점심쿠폰',SYSDATE);
 COMMIT;
 SELECT * FROM menu;
+DELETE FROM menu WHERE menu_no=9;
 
 -------------------세훈오빠가 만든 coupon DB(민이가 제약조건 추가)--------------------------------
 DROP TABLE coupon;
@@ -141,12 +146,21 @@ INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,5,'7gram','유자프라페'
 INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,6,'7gram','요거트스무디',3000,'../img/yogutSmothy.png','유기농 요거트로만든 요거트스무디!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
 INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,7,'7gram','자몽에이드',3000,'../img/jamongAide.png','자몽자몽해~!',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
 INSERT INTO coupon VALUES(coupon_seq.nextval,1,10000,8,'7gram','망고스무디',3000,'../img/mangoSmothy.png','망고망고해~',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+
+INSERT INTO coupon VALUES(coupon_seq.nextval,2,10000,10,'맥주창고','점심쿠폰',4500,'../img/coupon.png','KH학생들만을위한 점심쿠폰',SYSDATE,'N',NULL,'N',NULL,NULL,'Y');
+
 COMMIT;
 
 
 update coupon set coupon_used='Y' 
 where member_no = #{member_no} and client_no=#{client_no} and menu_no = #{menu_no}
 and rownum <= #{coupon_count}
+
+SELECT client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price, 
+		(select count(*) from coupon WHERE member_no = 10000 AND menu_no=7 AND coupon_state = 'Y') as coupon_count   
+		FROM coupon 
+		WHERE member_no=10000 AND menu_no=7 AND client_no=1 AND rownum = 1 
+		GROUP BY client_no, member_no, client_name, menu_no, menu_title, menu_image, menu_price;
 
 --쿠폰선물할때
 update coupon set member_no=#{memb24er_no},coupon_used_send='Y',coupon_send_date=SYSDATE,coupon_from=#{member_no}
@@ -222,34 +236,23 @@ CREATE SEQUENCE board_seq;
 CREATE TABLE board (
 	board_no NUMBER PRIMARY KEY,
 	member_no NUMBER NOT NULL,
-	client_no NUMBER NOT NULL, -- 이거로 학생들이 보는 카테고리 나누기
-	board_category VARCHAR2(100) NOT NULL, -- 이용후기:review , 공지사항:notice, 건의사항:complain
+	board_category VARCHAR2(100) NOT NULL, -- 7그램,맥주창고,요술포차...,공지사항,건의사항
 	board_title VARCHAR2(100) NOT NULL,
 	board_content VARCHAR2(1024) NOT NULL,
 	board_writer VARCHAR2(10) NOT NULL,
 	board_date_create DATE NOT NULL,
 	board_date_update DATE NULL,
-	board_count NUMBER NULL,
-	board_like NUMBER NULL,
+	board_count NUMBER NOT NULL,
+	board_like_count NUMBER NULL,
 	CONSTRAINT fk_board FOREIGN KEY(member_no) REFERENCES member(member_no) ON DELETE CASCADE
 );
-INSERT INTO board VALUES(board_seq.NEXTVAL,61,1,'review','이용후기게시판 이용안내','이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
-INSERT INTO board VALUES(board_seq.NEXTVAL,10000,1,'notice','공지사항게시판 이용안내','공지사항게시판 내용부분 테스트중','kh',SYSDATE,'','0','0');
+INSERT INTO board VALUES(board_seq.NEXTVAL,61,'7Gram','7Gram이용후기게시판 이용안내','이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
+INSERT INTO board VALUES(board_seq.NEXTVAL,61,'맥주창고','맥주창고 이용후기게시판 이용안내','맥주창고 이용후기게시판 내용부분 테스트중','이민이',SYSDATE,'','0','0');
 COMMIT;
 SELECT * FROM board;
-SELECT * FROM board WHERE BOARD_CATEGORY='notice';
+SELECT * FROM board WHERE BOARD_CATEGORY='7Gram';
 DELETE FROM board WHERE BOARD_WRITER='이민이' AND BOARD_CATEGORY='notice';
 ------------------------------------------------
-CREATE TABLE board (
-	board_no	NUMBER	NOT NULL,								
-	user_no	NUMBER	NOT NULL,									 					
-	board_title	VARCHAR2(500)	NOT NULL,						
-	board_content	VARCHAR2(3000)	NOT NULL,					
-	board_date_create	DATE	NOT NULL,						
-	board_date_update	DATE	NULL,							
-	board_category	VARCHAR2(500)	NOT NULL,					
-	board_count	NUMBER	NULL									
-);
 
 CREATE TABLE client_request (
 	request_no	NUMBER	NOT NULL,								 

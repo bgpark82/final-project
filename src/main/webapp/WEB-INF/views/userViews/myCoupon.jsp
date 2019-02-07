@@ -26,9 +26,8 @@
 	</div>
 	
 	<div class="row">
-		<table border="1">
+		<table class="table table-hover">
 			<tr>
-				<th>메뉴고유번호</th>
 				<th>제휴업체</th>
 				<th>메뉴 이름</th>
 				<th>가격</th>
@@ -44,7 +43,6 @@
 				<c:otherwise>
 					<c:forEach items="${my_coupon }" var="dto">
 						<tr>
-							<td>${dto.menu_no }</td>
 							<td>${dto.client_name }</td>
 							<td><a href='my_coupon_detail?member_no=${user.member_no}&menu_no=${dto.menu_no }'>${dto.menu_title }</a></td>
 							<td>${dto.menu_price }</td>
