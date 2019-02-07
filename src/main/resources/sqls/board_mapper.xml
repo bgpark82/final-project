@@ -4,7 +4,7 @@
 	<select id="notice_list" resultType="BoardDto">
 		select * 
 		from board
-		where board_category = '공지사항'
+		where board_category = '공지사항' order by board_no DESC
 	</select>
 	
 	<select id="board_detail" parameterType="int" resultType="BoardDto">
@@ -19,4 +19,42 @@
 		</selectKey>
 		INSERT INTO board VALUES(#{board_no}, ${member_no}, #{board_category} ,#{board_title}, #{board_content}, #{board_writer}, SYSDATE, NULL, 0,0)
 	</insert>
+	
+	<update id="board_update" parameterType="map">
+		update board set board_title = #{board_title}, board_content = #{board_content} where board_no = #{board_no}
+	</update>
+	
+	<delete id="board_delete" parameterType="int">
+		delete from board where board_no = #{board_no}
+	</delete>
+	
+	<!-- 민이꺼 -->
+	<select id="review_list" parameterType="String" resultType="BoardDto">
+		SELECT board_no,board_category,board_title,board_writer,board_date_create,board_count,board_like_count 
+		FROM board 
+		WHERE board_category=#{board_category}
+		ORDER BY board_no DESC
+	</select>
+	
+	<select id="review_detail" resultType="BoardDto" parameterType="int">
+		SELECT board_no,board_category,board_writer,board_title,board_content 
+		FROM board 
+		WHERE board_no=#{board_no}
+	</select>
+	
+	<insert id="review_insert" parameterType="BoardDto">
+		INSERT INTO board VALUES(board_seq.NEXTVAL,#{member_no},#{board_category},#{board_title},#{board_content},#{board_writer},SYSDATE,SYSDATE,0,0)
+	</insert>
+	
+	<update id="review_update" parameterType="BoardDto">
+		UPDATE board SET board_title=#{board_title}, board_content=#{board_content}, board_date_create=SYSDATE WHERE board_no =#{board_no}
+	</update>
+	
+	<delete id="review_delete" parameterType="int">
+		DELETE FROM board WHERE board_no=#{board_no}
+	</delete>
+	
+	<update id="updateHit" parameterType="int">
+		UPDATE board SET board_count = board_count + 1 WHERE board_no = #{board_no}
+	</update>
 </mapper>

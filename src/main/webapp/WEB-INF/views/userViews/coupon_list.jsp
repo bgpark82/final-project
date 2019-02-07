@@ -13,7 +13,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <meta charset="UTF-8">
-<title>7Gram 쿠폰목록 페이지</title>
+<title>${client.client_name } 쿠폰목록 페이지</title>
 <style type="text/css">
 .card{
    padding: 32px 10px 0 10px;
@@ -77,7 +77,9 @@ $(document).ready(function(){
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header">
-				<b>7Gram 쿠폰목록 </b><small> 원하는 메뉴의 쿠폰을 구매하세요!</small>
+				<b>${client_dto.client_name } 쿠폰목록 </b><small> 원하는 메뉴의 쿠폰을 구매하세요!</small> 
+				<button class="btn btn-default" onclick="location.href='../user/review_board_list?board_category=${client_dto.client_name}'">이용후기</button>
+				<button class="btn btn-default" onclick="location.href='../home/main'">메인으로</button>
 			</h1>
 		</div>
 	</div>
@@ -90,22 +92,22 @@ $(document).ready(function(){
 			</tr>
 		</c:when>
 		<c:otherwise>
-			<c:forEach items="${list }" var="dto">
+			<c:forEach items="${list }" var="menu_dto">
 				<article class="card col-12 col-md-4 col-lg-3">
 				<header style="margin-bottom: 5px">
-					<strong><span> ${dto.client_name }</span></strong>
+					<strong><span> ${menu_dto.client_name }</span></strong>
 				</header>
 				<figure>
-					<div class="frontpage_square img-rounded" onclick="location.href='coupon_detail?menu_no=${dto.menu_no}'" style="cursor: pointer; padding-bottom: 330px;">
-						  <img src="${dto.menu_image }"/>
-						  <div class="text">잔여 ${dto.coupon_count }</div>
+					<div class="frontpage_square img-rounded" onclick="location.href='coupon_detail?client_no=${client_dto.client_no }&menu_no=${menu_dto.menu_no}'" style="cursor: pointer; padding-bottom: 330px;">
+						  <img src="${menu_dto.menu_image }"/>
+						  <div class="text">잔여 ${menu_dto.coupon_count }</div>
 					</div>
 				<aside style="margin-top: 5px">
 					<div>
-						<div id="${dto.menu_title }" class="col-xs-6" style="padding: 0">${dto.menu_title }</div>
+						<div id="${menu_dto.menu_title }" class="col-xs-6" style="padding: 0">${menu_dto.menu_title }</div>
 					</div>
 					<div class="story-entry_content_title">
-						<strong> 가격 : ${dto.menu_price } </strong>
+						<strong> 가격 : ${menu_dto.menu_price } </strong>
 					</div>
 				</aside>
 				</figure>

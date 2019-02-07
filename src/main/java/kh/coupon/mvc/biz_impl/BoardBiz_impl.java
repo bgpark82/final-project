@@ -31,4 +31,46 @@ public class BoardBiz_impl implements BoardBiz{
 		return board_dao.board_insert(boardDto);
 	}
 
+	@Override
+	public int board_update(int board_no, String board_title, String board_content) {
+		return board_dao.board_update(board_no, board_title, board_content);
+	}
+
+	@Override
+	public boolean board_delete(int board_no) {
+		if(board_dao.board_delete(board_no) > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public List<BoardDto> review_list(String board_category) {
+		return board_dao.review_list(board_category);
+	}
+
+	@Override
+	public BoardDto review_detail(int board_no) {
+		return board_dao.review_detail(board_no);
+	}
+
+	@Override
+	public int review_insert(BoardDto review_dto) {
+		return board_dao.review_insert(review_dto);
+	}
+
+	@Override
+	public int review_update(BoardDto review_dto) {
+		return board_dao.review_update(review_dto);
+	}
+
+	@Override
+	public int review_delete(int board_no) {
+		return board_dao.review_delete(board_no);
+	}
+
+	@Override
+	public int updateHit(int board_no) {
+		return board_dao.updateHit(board_no);
+	}
 }

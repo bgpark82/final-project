@@ -29,7 +29,7 @@
 						<td>${coupon.menu_title }</td>
 						<td>${coupon.menu_price} </td>
 						<td>${coupon.coupon_count }</td>
-						<td><input type="button" value="판매" onclick="a href='../academy/coupon_sale?member_no=100&client_no=${coupon.client_no}&menu_no=${coupon.menu_no }'"></td>
+						<td><input type="button" value="판매" onclick="location.href='../academy/coupon_sale?member_no=${user.member_no }&client_no=${coupon.client_no}&menu_no=${coupon.menu_no }'"></td>
 					</tr>
 				</c:forEach>
 			</table>

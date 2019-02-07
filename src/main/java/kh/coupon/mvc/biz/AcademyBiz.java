@@ -27,15 +27,19 @@ public interface AcademyBiz {
 		
 	//제휴 신청 리스트 
 	public List<ClientDto> client_registration_list();
-		
+	
+	//제휴 신청 처리
 	public boolean client_update_registration(int client_no);
 		
 	//쿠폰 구매 요청
 	public boolean coupon_purchase_order(int member_no, int client_no, int menu_no, String member_name, String client_name, int coupon_history_quantity, int coupon_history_cost);
-		
+	
+	
 	//쿠폰 구매 요청 현황 보기
 	public List<CouponDto> coupon_purchase_order_list();
 	
+	//클라이언트_쿠폰 구매 요청 처리
+	//public List<CouponDto> client_coupon_purchase_order_list();
 	
 	
 	//구매 통계

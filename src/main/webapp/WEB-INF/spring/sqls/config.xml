@@ -19,5 +19,6 @@
 		<mapper resource="/sqls/client_mapper.xml"/>
 		<mapper resource="/sqls/coupon_mapper.xml"/>
 		<mapper resource="/sqls/board_mapper.xml"/>
+		<mapper resource="/sqls/expense_mapper.xml"/>
 	</mappers>
 </configuration>

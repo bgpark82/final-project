@@ -2,8 +2,6 @@ package kh.coupon.mvc.dto;
 
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-
 public class Coupon_historyDto {
 	/*
 	coupon_history_no NUMBER NOT NULL,			--쿠폰 구매,판매 내역의 고유번호
@@ -46,6 +44,22 @@ public class Coupon_historyDto {
 	
 	public Coupon_historyDto() {
 		
+	}
+	
+	public Coupon_historyDto(int member_no, int client_no, int menu_no, String member_name, String client_name, String menu_title, int menu_price, int coupon_history_quantity, int coupon_history_cost) {
+		this.member_no = member_no;
+		this.client_no = client_no;
+		this.menu_no = menu_no;
+		
+		this.member_name = member_name;
+		
+		this.client_name = client_name;
+		
+		this.menu_title = menu_title;
+		this.menu_price = menu_price;
+		
+		this.coupon_history_quantity = coupon_history_quantity;
+		this.coupon_history_cost = coupon_history_cost;
 	}
 	
 	public Coupon_historyDto(int coupon_history_no, int member_no, int client_no, int menu_no, String member_name, String client_name, String menu_title,

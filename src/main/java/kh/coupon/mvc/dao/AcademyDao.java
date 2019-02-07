@@ -31,6 +31,8 @@ public interface AcademyDao {
 	
 	public List<CouponDto> coupon_purchase_order_list();
 	
+	//public List<CouponDto> client_coupon_purchase_order_list();
+	
 	
 	//구매 통계
 	public List<Integer> purchase_statistics(int year, int client_no);

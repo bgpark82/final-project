@@ -13,7 +13,8 @@
 		<input type="hidden" name="member_no" value="${user.member_no }">
 	<table border="1">
 		<tr>
-			<td colspan="2"><input type="text" name="board_category" value=${board_category } readonly="readonly"/></td>
+			<th>카테고리</th>
+			<td><input type="text" name="board_category" value=${board_category } readonly="readonly"/></td>
 		</tr>
 		<tr>
 			<th>작성자</th>

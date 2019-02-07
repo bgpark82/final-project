@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import kh.coupon.mvc.dao.CouponDao;
 import kh.coupon.mvc.dto.ClientDto;
 import kh.coupon.mvc.dto.CouponDto;
-import kh.coupon.mvc.dto.MemberDto;
 
 @Repository
 public class CouponDao_impl implements CouponDao {
@@ -21,10 +20,10 @@ public class CouponDao_impl implements CouponDao {
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	@Override
-	public List<CouponDto> coupon_list() {
+	public List<CouponDto> coupon_list(int client_no) {
 		List<CouponDto> res = null;
 		try {
-			res = sqlSessionTemplate.selectList(namespace+"coupon_list");		
+			res = sqlSessionTemplate.selectList(namespace+"coupon_list",client_no);		
 		} catch(Exception e) {
 			System.out.println("daoImpl coupon_list 오류");
 			e.printStackTrace();
@@ -61,6 +60,8 @@ public class CouponDao_impl implements CouponDao {
 		}
 		return res;
 	}
+	
+	
 
 	//내쿠폰함에서 보유쿠폰(detail 같은것이라고 보면될것같다)
 	@Override
@@ -130,12 +131,11 @@ public class CouponDao_impl implements CouponDao {
 	}
 
 	@Override
-	public int coupon_gift(int member_to_no, int member_from_no, int member_no, int client_no, int menu_no, int coupon_count) {
+	public int coupon_gift(int member_to_no, int member_from_no, int member_no, int menu_no, int coupon_count) {
 		Map<String,Object> map = new HashMap<String, Object>();
 		map.put("member_to_no", member_to_no);
 		map.put("member_from_no", member_from_no);
 		map.put("member_no", member_no);
-		map.put("client_no", client_no);
 		map.put("menu_no", menu_no);
 		map.put("coupon_count",coupon_count);
 		int res = sqlSessionTemplate.update(namespace+"coupon_gift",map);		

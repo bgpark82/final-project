@@ -51,7 +51,6 @@ public class HomeController {
 		return "registerForm";
 	}
 	
-	
 	// 회원가입 성공시
 	@RequestMapping(value="registerConfirm", method=RequestMethod.POST)
 	public String register(@Valid @ModelAttribute("dto") MemberDto dto, BindingResult bind, HttpServletRequest request) {
@@ -95,14 +94,6 @@ public class HomeController {
 	public String accessDenied() {
 		return "access_denied";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	@RequestMapping("test")
 	public String test(Locale locale, Model model) {

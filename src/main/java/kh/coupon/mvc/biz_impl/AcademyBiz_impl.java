@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import kh.coupon.mvc.biz.AcademyBiz;
 import kh.coupon.mvc.dao.AcademyDao;
-import kh.coupon.mvc.dao.BoardDao;
-import kh.coupon.mvc.dto.BoardDto;
 import kh.coupon.mvc.dto.ClientDto;
 import kh.coupon.mvc.dto.CouponDto;
 import kh.coupon.mvc.dto.Coupon_historyDto;
@@ -76,21 +74,32 @@ public class AcademyBiz_impl implements AcademyBiz{
 			coupon_info.add(new CouponDto(member_no, client_no, menu_no, client_name, menu.getMenu_title(), menu.getMenu_price(), "test", menu.getMenu_detail()));
 		}
 		
-		//Coupon_history coupon_history = new Coupon_history(member_no, client_no, menu_no, member_name, client_name, menu.getMenu_title(), menu.getMenu_price(), coupon_history_quantity, coupon_history_cost, "구매");
+		
 		//수량만큼 생성된 list를 map에 담에 보내준다.
 		map.put("coupon_info", coupon_info);
 		//coupon_history_seq.nextval,100,2,1,'회계팀_장세훈','7gram','아메리카노',2000,100,SYSDATE,200000,'구매');
 		if(academy_dao.coupon_purchase_order(map) > 0) {
+			//Coupon_historyDto coupon_historyDto = new Coupon_historyDto(member_no, client_no, menu_no, member_name, client_name, menu.getMenu_title(), menu.getMenu_price(), coupon_history_quantity, coupon_history_cost, "구매");
 			return true;
 		}
 		return false;
 	}
+	
+	
+	
+	
 
 	@Override
 	public List<CouponDto> coupon_purchase_order_list() {
 		return academy_dao.coupon_purchase_order_list();
 	}
-
+	
+	/*
+	@Override
+	public List<CouponDto> client_coupon_purchase_order_list(){
+		return academy_dao.client_coupon_purchase_order_list();
+	}
+	 */
 	
 	@Override
 	public List<Integer> purchase_statistics(int year, int client_no) {

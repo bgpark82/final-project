@@ -31,7 +31,7 @@ $(document).ready(function(){
 //구매하기 모달창에서 수량 선택하고 이제 최종적으로 결제할때(insertform같은것)
 function coupon_buy(){
 	var condition = $("#condition option:selected").val();
-	location.href="coupon_buy?member_no=${user.member_no}&client_no=${coupon.client_no }&menu_no=${coupon.menu_no}&coupon_count="+condition;
+	location.href="coupon_buy?member_no=${user.member_no}&client_no=${coupon.client_no }&menu_no=${coupon.menu_no}&member_name=${user.member_name}&coupon_count="+condition;
 }
 
 function phone(){

@@ -229,7 +229,6 @@ public class AcademyController {
 	
 	@RequestMapping("board_detail")
 	public String board_detail(Model model, int board_no) {
-		System.out.println(board_no);
 		model.addAttribute("notice_dto",board_biz.board_detail(board_no));
 		return "academyViews/notice_detail";
 	}
@@ -246,8 +245,33 @@ public class AcademyController {
 		if(res > 0) {
 			return "redirect:board_detail?board_no="+res;
 		}
-		return "academyViews/notice_list";
+		return "redirect:notice_list";
 	}
+	
+	@RequestMapping("notice_updateForm")
+	public String board_updateForm(Model model, int board_no) {
+		model.addAttribute("boardDto",board_biz.board_detail(board_no));
+		return "academyViews/board_updateForm";
+	}
+	
+	@RequestMapping("notice_update")
+	public String board_update(Model model, int board_no, String board_title, String board_content) {
+		int res = board_biz.board_update(board_no, board_title, board_content);
+		if(res > 0) {
+			return "redirect:board_detail?board_no="+board_no;
+		}
+		return "redirect:notice_list";
+	}
+	
+	@RequestMapping("notice_delete")
+	public String board_delete(Model model, int board_no) {
+		if(board_biz.board_delete(board_no)) {
+			return "redirect:notice_list";
+		}
+		return "redirect:board_detail?board_no="+board_no;
+	}
+	
+	
 	
 	
 	
@@ -260,49 +284,69 @@ public class AcademyController {
 	 * 부가설명 :
 	 * 
 	 */
-	 @RequestMapping("purchase_statistics_page")
-	 public String purchase_statistics_page(Model model) {
-		 model.addAttribute("client_list",academy_biz.client_list());
-		 
-		 return "academyViews/purchase_statistics_page";
-	 }
-	
-	 @RequestMapping("purchase_statistics")
-	 public String purchase_statistics(Model model, int year, int client_no) {
-		 //구매 통계
-		 List<Integer> list = academy_biz.purchase_statistics(year, client_no);
-		 model.addAttribute("list", list);
-		 model.addAttribute("client_list",academy_biz.client_list());
-		 return "academyViews/purchase_statistics_page";
-	 }
-	 
-	 @RequestMapping("sale_statistics_page")
-	 public String sale_statistics_page(Model model) {
-		 model.addAttribute("client_list",academy_biz.client_list());
-		 return "academyViews/sale_statistics_page";
-	 }
-	 
-	 @RequestMapping("sale_statistics")
-	 public String sale_statistics(Model model, int year, int client_no) {
-		 //판매통계
-		 List<Integer> list = academy_biz.sale_statistics(year, client_no);
-		 Map<String, Integer> map = new HashMap<String, Integer>();
-		 
-		 JSONObject jObj = new JSONObject();
+	@RequestMapping("purchase_statistics_page")
+    public String purchase_statistics_page(Model model, int year, int client_no) {
+       List<Integer> list = academy_biz.purchase_statistics(year, client_no);
+       model.addAttribute("list", list);
+       model.addAttribute("client_list",academy_biz.client_list());
+       
+       return "academyViews/purchase_statistics_page";
+    }
+   
+    @RequestMapping("purchase_statistics")
+    public String purchase_statistics(Model model, int year, int client_no) {
+       //구매 통계
+       List<Integer> list = academy_biz.purchase_statistics(year, client_no);
+       model.addAttribute("list", list);
+       model.addAttribute("year", year);
+       model.addAttribute("client_list",academy_biz.client_list());
+       model.addAttribute("client_no",client_no);
+       return "academyViews/purchase_statistics_page";
+    }
+    
+    @RequestMapping("sale_statistics_page")
+    public String sale_statistics_page(Model model, int year, int client_no) {
+       model.addAttribute("client_list",academy_biz.client_list());
+       List<Integer> list = academy_biz.sale_statistics(year, client_no);
+       Map<String, Integer> map = new HashMap<String, Integer>();
+       
+       JSONObject jObj = new JSONObject();
 
-		 
-		 for(int i = 1; i< list.size();i++) {
-			 /*map.put(i+"", list.get(i-1));
-			 System.out.println(map);*/
-			 jObj.put(i+"", list.get(i-1));
-		 }
-		 
-		 
-		 model.addAttribute("json", jObj);
-		 model.addAttribute("client_list",academy_biz.client_list());
-		 
-		 return "academyViews/sale_statistics_page";
-	 }
+       
+       for(int i = 1; i< list.size();i++) {
+          /*map.put(i+"", list.get(i-1));
+          System.out.println(map);*/
+          jObj.put(i+"", list.get(i-1));
+       }
+       
+       
+       model.addAttribute("json", jObj);
+       model.addAttribute("client_list",academy_biz.client_list());
+       return "academyViews/sale_statistics_page";
+    }
+    
+    @RequestMapping("sale_statistics")
+    public String sale_statistics(Model model, int year, int client_no) {
+       //판매통계
+       List<Integer> list = academy_biz.sale_statistics(year, client_no);
+       Map<String, Integer> map = new HashMap<String, Integer>();
+       
+       JSONObject jObj = new JSONObject();
+
+       
+       for(int i = 1; i< list.size();i++) {
+          /*map.put(i+"", list.get(i-1));
+          System.out.println(map);*/
+          jObj.put(i+"", list.get(i-1));
+       }
+       
+       
+       model.addAttribute("json", jObj);
+       model.addAttribute("client_list",academy_biz.client_list());
+       
+       return "academyViews/sale_statistics_page";
+    }
+   
 	
 
 	

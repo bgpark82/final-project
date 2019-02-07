@@ -73,7 +73,13 @@ public class AcademyDao_impl implements AcademyDao{
 	public List<CouponDto> coupon_purchase_order_list() {
 		return sqlSession.selectList(NAMESPACE+"coupon_purchase_order_list");
 	}
-
+	
+	/*
+	@Override
+	public List<CouponDto> client_coupon_purchase_order_list() {
+		return sqlSession.selectList(NAMESPACE+"client_coupon_purchase_order_list");
+	}
+	*/
 	
 
 	@Override
@@ -91,5 +97,7 @@ public class AcademyDao_impl implements AcademyDao{
 		map.put("client_no", client_no);
 		return sqlSession.selectList(NAMESPACE+"sale_statistics", map);
 	}
+
+	
 
 }

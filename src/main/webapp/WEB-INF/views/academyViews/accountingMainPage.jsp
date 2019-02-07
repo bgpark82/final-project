@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,29 +9,32 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<c:set var="today" value="<%=new java.util.Date()%>" />
+  	<fmt:formatDate value="${today}" pattern="yyyy" var="year"/>
+  	
 	<h1>재무팀</h1>
 	<a href="../academy/coupon_stock">재고 내역</a> | 
 	<a href="../academy/purchase_history">구매 내역</a> | 
 	<a href="../academy/sales_history">판매 내역</a> | 
 	<a href="../academy/coupon_purchase_order_list">구매 요청 내역(학원)</a> |	
-	<a href="../academy/">구매 요청 내역(제휴업체) - 구현안됨</a>
+	<a href="../academy/">구매 요청 내역(제휴업체) - 구현안됨</a> |
 	<a href="../academy/menuPage">제휴업체 별 메뉴</a> |
-	<a href="../academy/purchase_statistics_page">업체별 쿠폰 구매 통계</a> |
-	<a href="../academy/sale_statistics_page">업체별 쿠폰 판매 통계</a><br/>
+	<a href="../academy/purchase_statistics_page?year=${year}&client_no=1">업체별 쿠폰 구매 통계</a> |
+	<a href="../academy/sale_statistics_page?year=${year}&client_no=1">업체별 쿠폰 판매 통계</a><br/>
 	
 	<h1>홍보팀</h1>
 	<a href="../academy/client_list">제휴업체 목록</a> |
 	<a href="../academy/client_registration_list">제휴업체 신청 목록</a> |
-	<a href="../academy/purchase_statistics_page">업체별 쿠폰 구매 통계</a> |
-	<a href="../academy/sale_statistics_page">업체별 쿠폰 판매 통계</a><br/>
+	<a href="../academy/purchase_statistics_page?year=${year}&client_no=1">업체별 쿠폰 구매 통계</a> |
+	<a href="../academy/sale_statistics_page?year=${year}&client_no=1">업체별 쿠폰 판매 통계</a><br/>
 	
 	<h1>운영팀</h1>
 	<a href="../academy/coupon_sale_page">쿠폰 판매</a> |
 	<a href="../academy/sales_history">판매 내역</a> |	
 	<a href="../academy/coupon_stock">재고 내역</a> |
 	<a href="../academy/notice_list">공지 사항</a> |
-	<a href="../academy/purchase_statistics_page">업체별 쿠폰 구매 통계</a> |
-	<a href="../academy/sale_statistics_page">업체별 쿠폰 판매 통계</a><br/>
+	<a href="../academy/purchase_statistics_page?year=${year}&client_no=1">업체별 쿠폰 구매 통계</a> |
+	<a href="../academy/sale_statistics_page?year=${year}&client_no=1">업체별 쿠폰 판매 통계</a><br/>
 	
 	
 	

@@ -5,7 +5,7 @@
 	<select id="coupon_stock" resultType="CouponDto">
 		SELECT client_no, client_name, menu_no, menu_title, menu_price, count(*) AS coupon_count
 		FROM coupon 
-		WHERE member_no = 100 AND coupon_state = 'Y'
+		WHERE member_no = 1 AND coupon_state = 'Y'
 		GROUP BY client_no, client_name, menu_no, menu_title, menu_price
 		ORDER BY client_no
 	</select>
@@ -13,13 +13,13 @@
 	<select id="purchase_history" resultType="Coupon_historyDto">
 		SELECT coupon_history_no, member_no, member_name, client_no, client_name, menu_no, menu_title, coupon_history_quantity, coupon_history_cost, coupon_history_date, coupon_history_info 
 		FROM coupon_history 
-		WHERE coupon_history_info = '구매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND EXTRACT(month FROM coupon_history_date) = 2
+		WHERE coupon_history_info = '구매' AND EXTRACT(year FROM coupon_history_date) = 2019
 	</select>
 	
 	<select id="sales_history" resultType="Coupon_historyDto">
 		SELECT coupon_history_no, member_no, member_name, client_no, client_name, menu_no, menu_title, coupon_history_quantity, coupon_history_cost, coupon_history_date, coupon_history_info 
 		FROM coupon_history 
-		WHERE coupon_history_info = '판매' AND EXTRACT(year FROM coupon_history_date) = 2019 AND EXTRACT(month FROM coupon_history_date) = 1
+		WHERE coupon_history_info = '판매' AND EXTRACT(year FROM coupon_history_date) = 2019
 	</select>
 	
 	<select id="menu_detail" parameterType="map" resultType="MenuDto">
@@ -59,10 +59,18 @@
 	<select id="coupon_purchase_order_list" resultType="CouponDto">
 		SELECT client_no, client_name, menu_no, menu_title, menu_price, count(*) AS coupon_count, sum(menu_price) AS total_amount
 		FROM coupon 
-		WHERE member_no = 100 AND coupon_state = 'N'
+		WHERE member_no = 1 AND coupon_state = 'N'
 		GROUP BY client_no, client_name, menu_no, menu_title, menu_price
 		ORDER BY client_no
 	</select>
+	
+<!-- 	<select id="client_coupon_purchase_order_list" resultType="CouponDto">
+		SELECT client_no, client_name, menu_no, menu_title, menu_price, count(*) AS coupon_count, sum(menu_price) AS total_amount
+		FROM coupon 
+		WHERE member_no = 1 AND coupon_state = 'N' AND client_no = #{client_no}
+		GROUP BY client_no, client_name, menu_no, menu_title, menu_price
+		ORDER BY client_no
+	</select> -->
 	
 	
 	<select id="purchase_statistics" parameterType="map" resultType="int">

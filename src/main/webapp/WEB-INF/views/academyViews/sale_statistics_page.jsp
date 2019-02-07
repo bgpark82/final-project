@@ -42,30 +42,30 @@
 
 
 <form action="../academy/sale_statistics" method="get">
-	<select name="year">
-		<c:set var="today" value="<%=new java.util.Date()%>" />
-			<fmt:formatDate value="${today}" pattern="yyyy" var="start"/>
-        	<option value="">--년도--</option>
+   <select name="year">
+      <c:set var="today" value="<%=new java.util.Date()%>" />
+         <fmt:formatDate value="${today}" pattern="yyyy" var="start"/>
+           
 
         <c:forEach begin="0" end="10" var="idx" step="1">
 
-            <option value="<c:out value="${start - idx}" />">
+            <option value="${start - idx}" <c:if test="${year == start - idx}"> selected='selected'</c:if>>
 
-			<c:out value="${start - idx}" />
-			
-			</option>
+         <c:out value="${start - idx}" />
+         
+         </option>
 
         </c:forEach>
-	</select>
+   </select>
 
-	<select name="client_no">
-		<option>--선택--</option>
-		<c:forEach var="client_Dto" items="${client_list }">
-			<option value="${client_Dto.client_no }">${client_Dto.client_name}</option>
-		</c:forEach>
-	</select>
-	<input type="submit" value="조회">
-</form>		
+   <select name="client_no">
+
+      <c:forEach var="client_Dto" items="${client_list }">
+         <option value="${client_Dto.client_no }" <c:if test="${client_no == client_Dto.client_no}"> selected='selected'</c:if>>${client_Dto.client_name}</option>
+      </c:forEach>
+   </select>
+   <input type="submit" value="조회">
+</form>      
 
 
 
@@ -73,13 +73,13 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
-    var series = ["2019"];
+    var series = [${year}]; 
  
-  	
+     
     if(${json} != null){
-  	
-  	var dataset = [${json}];
-  	
+     
+     var dataset = [${json}];
+     
     console.log(dataset);
     
 
@@ -94,10 +94,10 @@
         }); 
     
     
- 	/* var i = 1;
+    /* var i = 1;
     dataset.forEach(function(d) {
-    		data.push({x: i++ +"", y: d})
-    		
+          data.push({x: i++ +"", y: d})
+          
     });  */
     console.log(data);
     
@@ -113,7 +113,7 @@
     
 
     var yScale = d3.scaleLinear()
-		.domain([0, d3.max(dataset, function(d) { return d3.max(keys, function(key) { return d[key];});})])
+      .domain([0, d3.max(dataset, function(d) { return d3.max(keys, function(key) { return d[key];});})])
         .nice() //약간의 간격을 줌
         .range([height, 0]);
     var colors = d3.scaleOrdinal(d3.schemeCategory10);
@@ -134,15 +134,15 @@
  
     var line = d3.line()
         //.curve(d3.curveBasis)
-        		.x(function(d) { return xScale(d.x); })
-        		.y(function(d) { return yScale(d.y); });
+              .x(function(d) { return xScale(d.x); })
+              .y(function(d) { return yScale(d.y); });
     
     console.log(dataset);
     
     var lineG = svgG.append("g")
-       			 .selectAll("g")
-      			 .data(data)
-         		 .enter().append("g");
+                 .selectAll("g")
+                .data(data)
+                .enter().append("g");
     
     lineG.append("path")
         .attr("class", "lineChart")
@@ -168,7 +168,7 @@
         .attr("class", "toolTip")
         .style("display", "none");
  
-    var legend = svgG.append("g")
+      var legend = svgG.append("g")
         .attr("text-anchor", "end") /* The text-anchor attribute is used to align (start-, middle- or end-alignment) a string of text relative to a given point. */
         .selectAll("g")
         .data(series)
@@ -185,11 +185,11 @@
           .attr("x", width - 30)
           .attr("y", 9.5)
           .attr("dy", "0.32em")
-          .text(function(d) { return d; });
+          .text(function(d) { return d; }); 
 
-   	}else{
-  		
-  	};
+      }else{
+        
+     };
     
 </script>
 
