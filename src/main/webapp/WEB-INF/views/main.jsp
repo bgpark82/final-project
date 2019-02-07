@@ -23,7 +23,7 @@
 	
 	
 	<security:authorize access="hasRole('CLIENT')">
-		<a href="../client/menu_list">메뉴 리스트</a>
+		<a href="../client/clientMain">클라이언트 메인페이지</a>
 	</security:authorize>
 	
 	

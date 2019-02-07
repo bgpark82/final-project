@@ -120,6 +120,15 @@ public class ClientDto {
    public void setClient_paycode(int client_paycode) {
       this.client_paycode = client_paycode;
    }
+
+
+@Override
+public String toString() {
+	return "ClientDto [client_no=" + client_no + ", member_no=" + member_no + ", client_name=" + client_name
+			+ ", client_tel=" + client_tel + ", client_address=" + client_address + ", client_registration="
+			+ client_registration + ", client_max_client=" + client_max_client + ", client_reservation="
+			+ client_reservation + ", client_paycode=" + client_paycode + "]";
+}
    
    
    

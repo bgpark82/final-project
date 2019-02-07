@@ -33,51 +33,7 @@
 <body>
 
 	<!-- Navigation -->
-	<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
-		<div class="container">
-			<a class="navbar-brand js-scroll-trigger" href="clientMain">KHC</a>
-			<button
-				class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
-				type="button" data-toggle="collapse" data-target="#navbarResponsive"
-				aria-controls="navbarResponsive" aria-expanded="false"
-				aria-label="Toggle navigation">
-				카테고리<i class="fas fa-bars"></i>
-			</button>
-			
-			<!-- 드롭다운 -->
-				<div class="collapse navbar-collapse" id="navbarResponsive">
-					<ul>
-						<li><a href="#">제휴업체<i class='fa fa-angle-down'></i></a>
-							<ul>
-								<li><a href="client_beerMain">맥주창고</a></li>
-								<li><a href="client_sevenMain">7GRAM</a></li>
-								<li><a href="client_magicMain">요술포차</a></li>
-							</ul>
-						</li>
-					
-						<li><a href="#">커뮤니티<i class='fa fa-angle-down'></i></a>
-							<ul>
-								<li><a href="#">공지사항</a></li>
-								<li><a href="complain_board_list">건의사항</a></li>
-								<li><a href="review_board_list">이용후기</a></li>
-							</ul>
-						</li>
-					
-						<li><a href="#">마이페이지<i class='fa fa-angle-down'></i></a>
-							<ul>
-								<li><a href="myPage?member_no=${regist_dto.member_no }">내 업체 정보</a></li>
-								<li><a href="my_salesPage">매출현황</a></li>
-								<li><a href="menu_list?client_no=${client_dto.client_no }">메뉴관리</a></li>
-								<li><a href="my_mapPage">오시는길</a></li>
-							</ul>
-						</li>
-
-					</ul>
-				</div>
-			</div>
-			<h6 style="color:white;">${regist_dto.member_name } 님  환영합니다.</h6>
-
-	</nav>
+	<%@ include file="../form_client/header.jsp" %>
 
 
 	<!-- Header -->
@@ -132,24 +88,7 @@
 	</section>
 
 	<!-- Footer -->
-	<footer class="footer text-center">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4 mb-5 mb-lg-0">
-					<h4 class="text-uppercase mb-4">KH정보교육원</h4>
-					<h4 class="text-uppercase mb-2">@(주)세훈팩토리</h4>
-				</div>
-				<div class="col-md-4 mb-5 mb-lg-0">
-					<h4 class="text-uppercase mb-4">제휴업체 문의</h4>
-					<h4 class="text-uppercase mb-4">전화: 010-1234-1234</h4>
-					<h4 class="text-uppercase mb-4">주소: 서울특별시 테헤란로 1000-1</h4>
-				</div>
-				<div style="margin-left: 100px;">
-				<input type="button" value="제휴업체문의" onclick="location.href='insertform'" class="btn btn-primary" style="padding: 1rem 1.75rem; font-size: 1.25rem; "/>
-				</div>
-			</div>
-		</div>
-	</footer>
+	<%@ include file="../form_client/footer.jsp" %>
 
 	<!-- 모달창들-->
 	<!-- 로그인 모달창1 -->

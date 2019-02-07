@@ -2,12 +2,72 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="client">
 
-	<select id="client_list" resultType="ClientDto">
-		select * from client
+	<insert id="client_insert" parameterType="ClientDto">
+		INSERT INTO client VALUES (client_seq.NEXTVAL, #{member_no}, #{client_name}, #{client_tel}, #{client_address}, 'N', #{client_max_client}, #{client_reservation}, null)	
+	</insert>
+
+	<select id="client_select" parameterType="int" resultType="ClientDto">
+		SELECT * FROM client WHERE member_no = #{member_no}
 	</select>
 	
-	<select id="client_detail" parameterType="int" resultType="ClientDto">
-		select * from client where client_no=#{client_no}
+	
+	<!-- 메뉴 -->
+	<select id="menu_list" parameterType="int" resultType="MenuDto">
+		SELECT * FROM menu WHERE client_no = #{client_no}
 	</select>
-
+	
+	<select id="menu_selectone" parameterType="int" resultType="MenuDto">
+		SELECT * FROM menu WHERE menu_no = #{menu_no}
+	</select>
+	
+	<update id="menu_update" parameterType="MenuDto">
+		UPDATE menu SET menu_title = #{menu_title}, menu_price = #{menu_price}, menu_detail = #{menu_detail} WHERE menu_no = #{menu_no}
+	</update>
+	
+	<delete id="menu_delete" parameterType="int">
+		DELETE FROM menu WHERE menu_no = #{menu_no}
+	</delete>
+	
+	<insert id="menu_insert" parameterType="MenuDto">
+		INSERT INTO menu VALUES(menu_seq.NEXTVAL, #{client_no}, null, #{menu_title}, #{menu_price}, #{menu_image}, #{menu_detail}, SYSDATE)
+	</insert>
+	
+	
+	<!-- 건의사항 -->
+	<select id="complain_list" resultType="BoardDto">
+      SELECT * FROM board ORDER BY board_no DESC
+   </select>
+   
+   	<select id="complain_list_seven" resultType="BoardDto">
+		SELECT board_no,board_category,board_title,board_date_create,board_count,board_like_count FROM board WHERE board_category='7Gram' ORDER BY board_no DESC
+	</select>
+	
+	<select id="complain_list_bear" resultType="BoardDto">
+		SELECT board_no,board_category,board_title,board_date_create,board_count,board_like_count FROM board WHERE board_category='맥주창고' ORDER BY board_no DESC
+	</select>
+	
+	<select id="complain_list_magic" resultType="BoardDto">
+		SELECT board_no,board_category,board_title,board_date_create,board_count,board_like FROM board WHERE board_category='요술포차' ORDER BY board_no DESC
+	</select>
+   
+   <select id="complain_detail" resultType="BoardDto" parameterType="int">
+      SELECT board_no,board_writer,board_category,board_title,board_content,board_date_create,board_count FROM board WHERE board_no=#{board_no}
+   </select>
+   
+   <insert id="complain_insert" parameterType="BoardDto">
+      INSERT INTO board VALUES(board_seq.NEXTVAL,#{member_no},#{board_category},#{board_title},#{board_content},#{board_writer},SYSDATE,null,0,0)
+   </insert>
+   
+   <update id="complain_update" parameterType="BoardDto">
+      UPDATE board SET board_title=#{board_title}, board_content=#{board_content}, board_date_update=SYSDATE WHERE board_no =#{board_no}
+   </update>
+   
+   <delete id="complain_delete" parameterType="int">
+      DELETE FROM board WHERE board_no=#{board_no}
+   </delete>
+   
+   <update id="updateHit" parameterType="int">
+      UPDATE board SET board_count = board_count + 1 WHERE board_no = #{board_no}
+   </update>
+	
 </mapper>

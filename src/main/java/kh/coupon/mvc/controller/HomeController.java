@@ -1,5 +1,10 @@
 package kh.coupon.mvc.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -16,6 +21,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.WebUtils;
 
 import kh.coupon.mvc.biz.MemberBiz;
 import kh.coupon.mvc.dto.MemberDto;
@@ -83,7 +92,6 @@ public class HomeController {
 		return "memberIdChk";
 	}
 	
-	
 	@RequestMapping("main")
 	public String main() {
 		return "main";
@@ -94,6 +102,69 @@ public class HomeController {
 	public String accessDenied() {
 		return "access_denied";
 	}
+	
+
+	
+	
+	@RequestMapping(value="upload", method=RequestMethod.POST)
+	@ResponseBody
+	public String register(@RequestParam(name="file") MultipartFile file, HttpServletRequest request) {
+		System.out.println("파일 이름 : " + file.getOriginalFilename());
+		System.out.println("파일 크기 : " + file.getSize());
+		String filename = file.getOriginalFilename();
+		String fileName = "";
+		InputStream inputStream = null;
+		OutputStream outputStream = null;
+		
+		
+		try {
+			inputStream = file.getInputStream();
+			String path = WebUtils.getRealPath(request.getSession().getServletContext(), "/resources");
+			
+			System.out.println("업로드 될 실제 경로 : " + path);
+			
+			File storage = new File(path);
+			if(!storage.exists()) storage.mkdirs();
+			File newFile = new File(path+"/" + filename);
+			System.out.println("새로운 파일 : " + newFile);
+			
+			outputStream = new FileOutputStream(newFile);
+			int read = 0;
+			byte[] b = new byte[(int)file.getSize()];
+			
+			while((read=inputStream.read(b)) != -1) {
+				outputStream.write(b, 0, read);
+			}
+			
+			if(!newFile.exists()) newFile.createNewFile();
+			if(newFile != null) {
+				String ext = newFile.getName().substring(newFile.getName().lastIndexOf(".") + 1);
+				if(ext.equals("jpg") || ext.equals("png") || ext.equals("gif") || ext.equals("jpeg")) {
+					fileName = newFile.getName();
+				}				
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				inputStream.close();
+				outputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("==========>> file : " +filename);
+		return "http://localhost:8787/mvc/resources/"+fileName;
+	}
+	
+	
+	
+	
+	
 	
 	@RequestMapping("test")
 	public String test(Locale locale, Model model) {

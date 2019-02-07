@@ -6,8 +6,41 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
+
+$(document).ready(function(){
+	$('#submit').click(function() {
+		var form = $('#fileUpload');
+		var formData = new FormData(form)
+		formData.append("file",$("#file")[0].files[0]);
+		console.log($("#file")[0].files[0])
+		$.ajax({
+				url: '../upload',
+				type:'POST',
+				enctype: 'multipart/form-data',
+				data:formData,
+				beforeSend : function(xhr)
+                {   
+                    xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+                },
+				processData:false,
+				contentType:false,
+				cache:false,
+				success:function(data){
+					console.log("성공")
+					console.log(data)
+				
+					$('#img').append("<img style='width:75px; height:75px; border-radius:100%;' src=\'"+ data + "\' >" );
+					$('#member_profile').attr('value',data)
+				},
+                error:function(error){
+                	console.log("실패")
+                	console.log(error)
+                }
+			})
+	})
+})
 
 function idChk(){
 	var doc = document.getElementsByName("member_id")[0];
@@ -39,12 +72,17 @@ function idChkConfirm(){
 
 	<form:form action="../registerConfirm" method="post" modelAttribute="dto">
 		<input type="hidden" id="role" value="${member_role }"/>
+		<input type="hidden" name="member_profile" id="member_profile">
 		<form:hidden path="member_role"/>
 		<table>
 			<tr>
 				<th>프로필 사진</th>
 				<td>
-					이미지를 업로드 하세요.<form:input type="file" path="member_profile"/>
+					<span id="img"></span>
+					<form method="POST" enctype="multipart/form-data" id="fileUpload"><br>
+						<input type="file" name="file" id="file"/><br>
+						<input type="submit" value="사진 사용" id="submit"/>
+					</form>
 				</td>
 			</tr>
 			<tr>

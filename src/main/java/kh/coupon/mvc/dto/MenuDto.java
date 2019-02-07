@@ -17,7 +17,6 @@ public class MenuDto {
 	private int menu_no;
 	private int client_no;
 	private String client_name;
-	
 	private String menu_title;
 	private int menu_price;
 	private String menu_image;
@@ -27,8 +26,10 @@ public class MenuDto {
 	public MenuDto() {
 		
 	}
-	
-	public MenuDto(int menu_no, int client_no, String client_name, String menu_title, int menu_price, String menu_image, String menu_detail, Date menu_create_date) {
+
+	public MenuDto(int menu_no, int client_no, String client_name, String menu_title, int menu_price, String menu_image,
+			String menu_detail, Date menu_create_date) {
+		super();
 		this.menu_no = menu_no;
 		this.client_no = client_no;
 		this.client_name = client_name;
@@ -103,5 +104,9 @@ public class MenuDto {
 		this.menu_create_date = menu_create_date;
 	}
 	
+
+	
+	
+
 	
 }
