@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="expense">
+
+<!-- 년,월에 맞는 월별 지출내역보기 -->
+   <select id="accountCalDetail" parameterType="map" resultType="Coupon_historyDto" >
+   		SELECT coupon_history_no, member_no, member_name, client_no, client_name, menu_no,menu_title, coupon_history_quantity, coupon_history_cost, coupon_history_date 
+		FROM coupon_history 
+		WHERE member_no = #{member_no} AND coupon_history_info = '판매' AND EXTRACT(year FROM coupon_history_date) = #{year} AND EXTRACT(month FROM coupon_history_date) = #{month}
+  		ORDER BY coupon_history_date DESC
+   </select>
+</mapper>
